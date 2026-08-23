@@ -464,7 +464,7 @@ def configure_for_tests():
 
 
 def start():
-    print(f"{'API server' if '--nowebui' in sys.argv else 'Web UI'} を引数 {shlex.join(sys.argv[1:])} で起動中...")
+    print(f"{'API server' if '--nowebui' in sys.argv else 'Web UI'} を引数 '{shlex.join(sys.argv[1:])}' で起動中...")
     import webui
     if '--nowebui' in sys.argv:
         webui.api_only()
