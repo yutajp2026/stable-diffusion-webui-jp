@@ -333,10 +333,10 @@ def create_ui():
                                 with FormRow(elem_id="txt2img_hires_fix_row4", variant="compact", visible=opts.hires_fix_show_prompts) as hr_prompts_container:
                                     with gr.Column(scale=80):
                                         with gr.Row():
-                                            hr_prompt = gr.Textbox(label="高解像度プロンプト", elem_id="hires_prompt", show_label=False, lines=3, placeholder="Prompt for hires fix pass.\nLeave empty to use the same prompt as in first pass.", elem_classes=["prompt"])
+                                            hr_prompt = gr.Textbox(label="高解像度プロンプト", elem_id="hires_prompt", show_label=False, lines=3, placeholder="高解像度修正パスのプロンプト。\n最初のパスと同じプロンプトを使用するには空のままにします。", elem_classes=["prompt"])
                                     with gr.Column(scale=80):
                                         with gr.Row():
-                                            hr_negative_prompt = gr.Textbox(label="高解像度ネガティブプロンプト", elem_id="hires_neg_prompt", show_label=False, lines=3, placeholder="Negative prompt for hires fix pass.\nLeave empty to use the same negative prompt as in first pass.", elem_classes=["prompt"])
+                                            hr_negative_prompt = gr.Textbox(label="高解像度ネガティブプロンプト", elem_id="hires_neg_prompt", show_label=False, lines=3, placeholder="高解像度修正パスのネガティブプロンプト。\n最初のパスと同じネガティブプロンプトを使用するには空のままにします。", elem_classes=["prompt"])
 
                             scripts.scripts_txt2img.setup_ui_for_section(category)
 
@@ -573,7 +573,7 @@ def create_ui():
                                     with gr.TabItem('アップロード', id='batch_upload', elem_id="img2img_batch_upload_tab") as tab_batch_upload:
                                         img2img_batch_upload = gr.Files(label="Files", interactive=True, elem_id="img2img_batch_upload")
                                     with gr.TabItem('ディレクトリから', id='batch_from_dir', elem_id="img2img_batch_from_dir_tab") as tab_batch_from_dir:
-                                        hidden = '<br>Disabled when launched with --hide-ui-dir-config.' if shared.cmd_opts.hide_ui_dir_config else ''
+                                        hidden = '<br>--hide-ui-dir-configで起動時に無効化。' if shared.cmd_opts.hide_ui_dir_config else ''
                                         gr.HTML(
                                             "<p style='padding-bottom: 1em;' class=\"text-gray-500\">サーバーが稼働している同じマシン上のディレクトリでイメージを処理します。" +
                                             "<br>出力ディレクトリに書き込むのではなく、通常の画像保存には空の出力ディレクトリを使いましょう。" +
@@ -587,8 +587,8 @@ def create_ui():
                                 tab_batch_from_dir.select(fn=lambda: "from dir", inputs=[], outputs=[img2img_batch_source_type])
                                 with gr.Accordion("PNG info", open=False):
                                     img2img_batch_use_png_info = gr.Checkbox(label="プロンプトにpng情報を追加する", elem_id="img2img_batch_use_png_info")
-                                    img2img_batch_png_info_dir = gr.Textbox(label="PNG情報ディレクトリ", **shared.hide_dirs, placeholder="Leave empty to use input directory", elem_id="img2img_batch_png_info_dir")
-                                    img2img_batch_png_info_props = gr.CheckboxGroup(["Prompt", "Negative prompt", "Seed", "CFG scale", "Sampler", "Steps", "Model hash"], label="png情報から取るべきパラメータ", info="png情報からのプロンプトは、UIで設定されたプロンプトに付加されます。")
+                                    img2img_batch_png_info_dir = gr.Textbox(label="PNG情報ディレクトリ", **shared.hide_dirs, placeholder="入力ディレクトリを使うには空のままにしてください", elem_id="img2img_batch_png_info_dir")
+                                    img2img_batch_png_info_props = gr.CheckboxGroup(["プロンプト", "ネガティブプロンプト", "シード", "CFGスケール", "サンプラー", "ステップ数", "モデルハッシュ"], label="png情報から取るべきパラメータ", info="png情報からのプロンプトは、UIで設定されたプロンプトに付加されます。")
 
                             img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload, tab_batch]
 
@@ -914,17 +914,17 @@ def create_ui():
                             gr.HTML(value="")
 
                         with gr.Column():
-                            create_embedding = gr.Button(value="Create embedding", variant='primary', elem_id="train_create_embedding")
+                            create_embedding = gr.Button(value="埋め込みを作成する", variant='primary', elem_id="train_create_embedding")
 
                 with gr.Tab(label="ハイパーネットワークを作成する", id="create_hypernetwork"):
                     new_hypernetwork_name = gr.Textbox(label="名前", elem_id="train_new_hypernetwork_name")
                     new_hypernetwork_sizes = gr.CheckboxGroup(label="Modules", value=["768", "320", "640", "1280"], choices=["768", "1024", "320", "640", "1280"], elem_id="train_new_hypernetwork_sizes")
-                    new_hypernetwork_layer_structure = gr.Textbox("1, 2, 1", label="ハイパーネットワークの層構造を入力", placeholder="1st and last digit must be 1. ex:'1, 2, 1'", elem_id="train_new_hypernetwork_layer_structure")
+                    new_hypernetwork_layer_structure = gr.Textbox("1, 2, 1", label="ハイパーネットワークの層構造を入力", placeholder="最初と最後の数字は1でなければなりません。例えば:'1, 2, 1'", elem_id="train_new_hypernetwork_layer_structure")
                     new_hypernetwork_activation_func = gr.Dropdown(value="linear", label="ハイパーネットワークの活性化関数を選択", choices=hypernetworks_ui.keys, elem_id="train_new_hypernetwork_activation_func")
                     new_hypernetwork_initialization_option = gr.Dropdown(value = "Normal", label="層の重み初期化を選択", choices=["Normal", "KaimingUniform", "KaimingNormal", "XavierUniform", "XavierNormal"], elem_id="train_new_hypernetwork_initialization_option")
                     new_hypernetwork_add_layer_norm = gr.Checkbox(label="層正規化を追加", elem_id="train_new_hypernetwork_add_layer_norm")
                     new_hypernetwork_use_dropout = gr.Checkbox(label="ドロップアウトを使用", elem_id="train_new_hypernetwork_use_dropout")
-                    new_hypernetwork_dropout_structure = gr.Textbox("0, 0, 0", label="ハイパーネットワークのドロップアウト構造を入力 (または空)", placeholder="1st and last digit must be 0 and values should be between 0 and 1. ex:'0, 0.01, 0'")
+                    new_hypernetwork_dropout_structure = gr.Textbox("0, 0, 0", label="ハイパーネットワークのドロップアウト構造を入力 (または空)", placeholder="最初と最後の数字は0でなければなりません。例えば:'0, 0.01, 0'")
                     overwrite_old_hypernetwork = gr.Checkbox(value=False, label="古いハイパーネットワークを上書き", elem_id="train_overwrite_old_hypernetwork")
 
                     with gr.Row():
@@ -947,8 +947,8 @@ def create_ui():
                         create_refresh_button(train_hypernetwork_name, shared.reload_hypernetworks, lambda: {"choices": sorted(shared.hypernetworks)}, "refresh_train_hypernetwork_name")
 
                     with FormRow():
-                        embedding_learn_rate = gr.Textbox(label='埋め込み学習率', placeholder="Embedding Learning rate", value="0.005", elem_id="train_embedding_learn_rate")
-                        hypernetwork_learn_rate = gr.Textbox(label='ハイパーネットワーク学習率', placeholder="Hypernetwork Learning rate", value="0.00001", elem_id="train_hypernetwork_learn_rate")
+                        embedding_learn_rate = gr.Textbox(label='埋め込み学習率', placeholder="埋め込み学習率", value="0.005", elem_id="train_embedding_learn_rate")
+                        hypernetwork_learn_rate = gr.Textbox(label='ハイパーネットワーク学習率', placeholder="ハイパーネットワーク学習率", value="0.00001", elem_id="train_hypernetwork_learn_rate")
 
                     with FormRow():
                         clip_grad_mode = gr.Dropdown(value="disabled", label="グラデーションクリッピング", choices=["disabled", "value", "norm"])
