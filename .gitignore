@@ -2,6 +2,7 @@ __pycache__
 *.ckpt
 *.safetensors
 *.pth
+*.exe
 .DS_Store
 /ESRGAN/*
 /SwinIR/*

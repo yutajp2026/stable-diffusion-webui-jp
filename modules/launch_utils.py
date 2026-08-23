@@ -346,7 +346,7 @@ def prepare_environment():
     openclip_package = os.environ.get('OPENCLIP_PACKAGE', "https://github.com/mlfoundations/open_clip/archive/bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip")
 
     assets_repo = os.environ.get('ASSETS_REPO', "https://github.com/AUTOMATIC1111/stable-diffusion-webui-assets.git")
-    stable_diffusion_repo = os.environ.get('STABLE_DIFFUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
+    stable_diffusion_repo = os.environ.get('STABLE_DIFFUSION_REPO', "https://github.com/w-e-w/stablediffusion.git")
     stable_diffusion_xl_repo = os.environ.get('STABLE_DIFFUSION_XL_REPO', "https://github.com/Stability-AI/generative-models.git")
     k_diffusion_repo = os.environ.get('K_DIFFUSION_REPO', 'https://github.com/crowsonkb/k-diffusion.git')
     blip_repo = os.environ.get('BLIP_REPO', 'https://github.com/salesforce/BLIP.git')
@@ -391,7 +391,9 @@ def prepare_environment():
     startup_timer.record("torch GPU test")
 
     if not is_installed("clip"):
-        run_pip(f"install {clip_package}", "clip")
+        run_pip("install setuptools==69.5.1", "setuptools")
+        run_pip("install wheel", "wheel")
+        run_pip(f"install --no-build-isolation {clip_package}", "clip")
         startup_timer.record("install clip")
 
     if not is_installed("open_clip"):

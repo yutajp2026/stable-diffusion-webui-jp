@@ -167,7 +167,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 ## クレジット
 借用したコードのライセンスは `Settings -> Licenses` 画面、および `html/licenses.html` ファイルで確認できます。
 
-- Stable Diffusion - ~~https://github.com/Stability-AI/stablediffusion~~ 存在しないのでこちらに変更https://github.com/CompVis/stable-diffusion, https://github.com/CompVis/taming-transformers, https://github.com/mcmonkey4eva/sd3-ref
+- Stable Diffusion - ~~https://github.com/Stability-AI/stablediffusion~~ 存在しないのでこちらに変更https://github.com/w-e-w/stablediffusion, https://github.com/CompVis/taming-transformers, https://github.com/mcmonkey4eva/sd3-ref
 - k-diffusion - https://github.com/crowsonkb/k-diffusion.git
 - Spandrel - https://github.com/chaiNNer-org/spandrel による実装
   - GFPGAN - https://github.com/TencentARC/GFPGAN.git
