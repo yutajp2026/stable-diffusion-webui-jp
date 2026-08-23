@@ -518,7 +518,7 @@ def create_ui():
                     with gr.Row(variant="compact", elem_id=f"img2img_copy_to_{tab_name}"):
                         gr.HTML("画像をコピー: ", elem_id=f"img2img_label_copy_to_{tab_name}")
 
-                        for title, name in zip(['img2img', 'スケッチ', 'インペイント', 'インペイントスケッチ'], ['img2img', 'スケッチ', 'インペイント', 'インペイントスケッチ']):
+                        for title, name in zip(['img2img', 'スケッチ', 'インペイント', 'インペイントスケッチ'], ['img2img', 'sketch', 'inpaint', 'inpaint_sketch']):
                             if name == tab_name:
                                 gr.Button(title, interactive=False)
                                 copy_image_destinations[name] = elem
@@ -588,7 +588,7 @@ def create_ui():
                                 with gr.Accordion("PNG info", open=False):
                                     img2img_batch_use_png_info = gr.Checkbox(label="プロンプトにpng情報を追加する", elem_id="img2img_batch_use_png_info")
                                     img2img_batch_png_info_dir = gr.Textbox(label="PNG情報ディレクトリ", **shared.hide_dirs, placeholder="Leave empty to use input directory", elem_id="img2img_batch_png_info_dir")
-                                    img2img_batch_png_info_props = gr.CheckboxGroup(["Prompt", "Negative prompt", "Seed", "CFG scale", "Sampler", "Steps", "Model hash"], label="Parameters to take from png info", info="Prompts from png info will be appended to prompts set in ui.")
+                                    img2img_batch_png_info_props = gr.CheckboxGroup(["Prompt", "Negative prompt", "Seed", "CFG scale", "Sampler", "Steps", "Model hash"], label="png情報から取るべきパラメータ", info="png情報からのプロンプトは、UIで設定されたプロンプトに付加されます。")
 
                             img2img_tabs = [tab_img2img, tab_sketch, tab_inpaint, tab_inpaint_color, tab_inpaint_upload, tab_batch]
 
@@ -615,7 +615,7 @@ def create_ui():
                             )
 
                         with FormRow():
-                            resize_mode = gr.Radio(label="リサイズモード", elem_id="resize_mode", choices=["ただサイズを変える", "トリミングとサイズ変更", "リサイズとフィル", "ただサイズを変える(潜在的なアップスケール)"], type="index", value="Just resize")
+                            resize_mode = gr.Radio(label="リサイズモード", elem_id="resize_mode", choices=["ただサイズを変える", "トリミングとサイズ変更", "リサイズとフィル", "ただサイズを変える(潜在的なアップスケール)"], type="index", value="ただサイズを変える")
 
                     elif category == "dimensions":
                         with FormRow():
