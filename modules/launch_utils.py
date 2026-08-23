@@ -268,7 +268,7 @@ def run_extensions_installers(settings_file):
 
     with startup_timer.subcategory("run extensions installers"):
         for dirname_extension in list_extensions(settings_file):
-            logging.debug(f"Installing {dirname_extension}")
+            logging.debug(f"{dirname_extension}をインストール中...")
 
             path = os.path.join(extensions_dir, dirname_extension)
 
@@ -282,8 +282,8 @@ re_requirement = re.compile(r"\s*([-_a-zA-Z0-9]+)\s*(?:==\s*([-+_.a-zA-Z0-9]+))?
 
 def requirements_met(requirements_file):
     """
-    Does a simple parse of a requirements.txt file to determine if all rerqirements in it
-    are already installed. Returns True if so, False if not installed or parsing fails.
+    requirements.txtファイルを単純に解析して、すべての要件が既にインストールされているかどうかを判断します。
+    すべての要件がインストールされている場合はTrueを返し、そうでない場合はFalseを返します。
     """
 
     import importlib.metadata
@@ -296,6 +296,7 @@ def requirements_met(requirements_file):
 
             m = re.match(re_requirement, line)
             if m is None:
+                print(f"要件の形式が正しくありません: {line}")
                 return False
 
             package = m.group(1).strip()
