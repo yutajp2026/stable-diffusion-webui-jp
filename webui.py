@@ -37,7 +37,7 @@ def api_only():
     script_callbacks.before_ui_callback()
     script_callbacks.app_started_callback(None, app)
 
-    print(f"Startup time: {startup_timer.summary()}.")
+    print(f"起動時間: {startup_timer.summary()}.")
     api.launch(
         server_name=initialize_util.gradio_server_name(),
         port=cmd_opts.port if cmd_opts.port else 7861,
@@ -62,7 +62,7 @@ def webui():
         startup_timer.record("scripts before_ui_callback")
 
         shared.demo = ui.create_ui()
-        startup_timer.record("create ui")
+        startup_timer.record("UI作成")
 
         if not cmd_opts.no_gradio_queue:
             shared.demo.queue(64)
@@ -95,7 +95,7 @@ def webui():
             root_path=f"/{cmd_opts.subpath}" if cmd_opts.subpath else "",
         )
 
-        startup_timer.record("gradio launch")
+        startup_timer.record("gradio起動")
 
         # gradio uses a very open CORS policy via app.user_middleware, which makes it possible for
         # an attacker to trick the user into opening a malicious HTML page, which makes a request to the
@@ -119,7 +119,7 @@ def webui():
             script_callbacks.app_started_callback(shared.demo, app)
 
         timer.startup_record = startup_timer.dump()
-        print(f"Startup time: {startup_timer.summary()}.")
+        print(f"起動時間: {startup_timer.summary()}.")
 
         try:
             while True:
@@ -128,13 +128,13 @@ def webui():
                     if server_command in ("stop", "restart"):
                         break
                     else:
-                        print(f"Unknown server command: {server_command}")
+                        print(f"未知のサーバー コマンド: {server_command}")
         except KeyboardInterrupt:
-            print('Caught KeyboardInterrupt, stopping...')
+            print('Ctrl+Cが押されました。停止しています...')
             server_command = "stop"
 
         if server_command == "stop":
-            print("Stopping server...")
+            print("サーバーを停止しています...")
             # If we catch a keyboard interrupt, we want to stop the server and exit.
             shared.demo.close()
             break
@@ -142,7 +142,7 @@ def webui():
         # disable auto launch webui in browser for subsequent UI Reload
         os.environ.setdefault('SD_WEBUI_RESTARTING', '1')
 
-        print('Restarting UI...')
+        print('UIを再起動しています...')
         shared.demo.close()
         time.sleep(0.5)
         startup_timer.reset()

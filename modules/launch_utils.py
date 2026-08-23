@@ -184,7 +184,7 @@ def git_clone(url, dir, name, commithash=None):
 
         run_git(dir, name, 'fetch', f"{name}の更新を取得中...", f"{name}の取得に失敗しました", autofix=False)
 
-        run_git(dir, name, f'checkout {commithash}', f"{name}のコミットをチェックアウト中: {commithash}...", f"{name}のコミット {commithash} のチェックアウトに失敗しました", live=True)
+        run_git(dir, name, f'checkout {commithash}', f"{name}のコミット{commithash}をチェックアウト中...", f"{name}のコミット {commithash} のチェックアウトに失敗しました", live=True)
 
         return
 

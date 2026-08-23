@@ -28,7 +28,7 @@ def main():
     if args.dump_sysinfo:
         filename = launch_utils.dump_sysinfo()
 
-        print(f"Sysinfo saved as {filename}. Exiting...")
+        print(f"sysinfoは {filename} として保存されました。終了します。")
 
         exit(0)
 
