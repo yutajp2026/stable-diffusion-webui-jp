@@ -46,19 +46,19 @@ def check_python_version():
         import modules.errors
 
         modules.errors.print_error_explanation(f"""
-INCOMPATIBLE PYTHON VERSION
+互換性のない Python バージョン
 
-This program is tested with 3.10.6 Python, but you have {major}.{minor}.{micro}.
-If you encounter an error with "RuntimeError: Couldn't install torch." message,
-or any other error regarding unsuccessful package (library) installation,
-please downgrade (or upgrade) to the latest version of 3.10 Python
-and delete current Python and "venv" folder in WebUI's directory.
+このプログラムは Python 3.10.6 でテストされていますが、現在 {major}.{minor}.{micro} を使用しています。
+もし「RuntimeError: torchのインストールに失敗しました」というメッセージが出たり、
+パッケージ（ライブラリ）のインストールに関する他のエラーが発生した場合は、
+最新の 3.10 Python にダウングレード（またはアップグレード）し、
+現在の Python と WebUI のディレクトリ内の "venv" フォルダを削除してください。
 
-You can download 3.10 Python from here: https://www.python.org/downloads/release/python-3106/
+Python 3.10 は以下からダウンロードできます: https://www.python.org/downloads/release/python-3106/
 
-{"Alternatively, use a binary release of WebUI: https://github.com/AUTOMATIC1111/stable-diffusion-webui/releases/tag/v1.0.0-pre" if is_windows else ""}
+{"あるいは、WebUI のバイナリリリースを使用する: https://github.com/AUTOMATIC1111/stable-diffusion-webui/releases/tag/v1.0.0-pre" if is_windows else ""}
 
-Use --skip-python-version-check to suppress this warning.
+--skip-python-version-check を使うとこの警告を無視できます。
 """)
 
 
@@ -105,14 +105,14 @@ def run(command, desc=None, errdesc=None, custom_env=None, live: bool = default_
 
     if result.returncode != 0:
         error_bits = [
-            f"{errdesc or 'Error running command'}.",
-            f"Command: {command}",
-            f"Error code: {result.returncode}",
+            f"{errdesc or 'コマンドの実行中にエラーが発生しました'}.",
+            f"コマンド: {command}",
+            f"エラーコード: {result.returncode}",
         ]
         if result.stdout:
-            error_bits.append(f"stdout: {result.stdout}")
+            error_bits.append(f"標準出力: {result.stdout}")
         if result.stderr:
-            error_bits.append(f"stderr: {result.stderr}")
+            error_bits.append(f"エラー出力: {result.stderr}")
         raise RuntimeError("\n".join(error_bits))
 
     return (result.stdout or "")
@@ -141,7 +141,7 @@ def run_pip(command, desc=None, live=default_command_live):
         return
 
     index_url_line = f' --index-url {index_url}' if index_url != '' else ''
-    return run(f'"{python}" -m pip {command} --prefer-binary{index_url_line}', desc=f"Installing {desc}", errdesc=f"Couldn't install {desc}", live=live)
+    return run(f'"{python}" -m pip {command} --prefer-binary{index_url_line}', desc=f"{desc}をインストール中...", errdesc=f"{desc}のインストールに失敗しました", live=live)
 
 
 def check_run_python(code: str) -> bool:
@@ -150,8 +150,8 @@ def check_run_python(code: str) -> bool:
 
 
 def git_fix_workspace(dir, name):
-    run(f'"{git}" -C "{dir}" fetch --refetch --no-auto-gc', f"Fetching all contents for {name}", f"Couldn't fetch {name}", live=True)
-    run(f'"{git}" -C "{dir}" gc --aggressive --prune=now', f"Pruning {name}", f"Couldn't prune {name}", live=True)
+    run(f'"{git}" -C "{dir}" fetch --refetch --no-auto-gc', f"{name} のすべてのコンテンツを取得中...", f"{name} の取得に失敗しました", live=True)
+    run(f'"{git}" -C "{dir}" gc --aggressive --prune=now', f"{name} の不要なファイルを削除中...", f"{name} の削除に失敗しました", live=True)
     return
 
 
@@ -162,7 +162,7 @@ def run_git(dir, name, command, desc=None, errdesc=None, custom_env=None, live: 
         if not autofix:
             raise
 
-    print(f"{errdesc}, attempting autofix...")
+    print(f"{errdesc}, 自動修復を試みています...")
     git_fix_workspace(dir, name)
 
     return run(f'"{git}" -C "{dir}" {command}', desc=desc, errdesc=errdesc, custom_env=custom_env, live=live)
@@ -175,27 +175,27 @@ def git_clone(url, dir, name, commithash=None):
         if commithash is None:
             return
 
-        current_hash = run_git(dir, name, 'rev-parse HEAD', None, f"Couldn't determine {name}'s hash: {commithash}", live=False).strip()
+        current_hash = run_git(dir, name, 'rev-parse HEAD', None, f"{name}のハッシュを決定できませんでした: {commithash}", live=False).strip()
         if current_hash == commithash:
             return
 
-        if run_git(dir, name, 'config --get remote.origin.url', None, f"Couldn't determine {name}'s origin URL", live=False).strip() != url:
-            run_git(dir, name, f'remote set-url origin "{url}"', None, f"Failed to set {name}'s origin URL", live=False)
+        if run_git(dir, name, 'config --get remote.origin.url', None, f"{name}のオリジンURLを決定できませんでした", live=False).strip() != url:
+            run_git(dir, name, f'remote set-url origin "{url}"', None, f"{name}のオリジンURLの設定に失敗しました", live=False)
 
-        run_git(dir, name, 'fetch', f"Fetching updates for {name}...", f"Couldn't fetch {name}", autofix=False)
+        run_git(dir, name, 'fetch', f"{name}の更新を取得中...", f"{name}の取得に失敗しました", autofix=False)
 
-        run_git(dir, name, f'checkout {commithash}', f"Checking out commit for {name} with hash: {commithash}...", f"Couldn't checkout commit {commithash} for {name}", live=True)
+        run_git(dir, name, f'checkout {commithash}', f"{name}のコミットをチェックアウト中: {commithash}...", f"{name}のコミット {commithash} のチェックアウトに失敗しました", live=True)
 
         return
 
     try:
-        run(f'"{git}" clone --config core.filemode=false "{url}" "{dir}"', f"Cloning {name} into {dir}...", f"Couldn't clone {name}", live=True)
+        run(f'"{git}" clone --config core.filemode=false "{url}" "{dir}"', f"{name}を{dir}にクローン中...", f"{name}のクローンに失敗しました", live=True)
     except RuntimeError:
         shutil.rmtree(dir, ignore_errors=True)
         raise
 
     if commithash is not None:
-        run(f'"{git}" -C "{dir}" checkout {commithash}', None, "Couldn't checkout {name}'s hash: {commithash}")
+        run(f'"{git}" -C "{dir}" checkout {commithash}', None, f"{name}のハッシュをチェックアウトできませんでした: {commithash}")
 
 
 def git_pull_recursive(dir):
@@ -203,9 +203,9 @@ def git_pull_recursive(dir):
         if os.path.exists(os.path.join(subdir, '.git')):
             try:
                 output = subprocess.check_output([git, '-C', subdir, 'pull', '--autostash'])
-                print(f"Pulled changes for repository in '{subdir}':\n{output.decode('utf-8').strip()}\n")
+                print(f"'{subdir}' のリポジトリの変更を取得しました:\n{output.decode('utf-8').strip()}\n")
             except subprocess.CalledProcessError as e:
-                print(f"Couldn't perform 'git pull' on repository in '{subdir}':\n{e.output.decode('utf-8').strip()}\n")
+                print(f"{subdir} のリポジトリで 'git pull' を実行できませんでした:\n{e.output.decode('utf-8').strip()}\n")
 
 
 def version_check(commit):
@@ -214,15 +214,15 @@ def version_check(commit):
         commits = requests.get('https://api.github.com/repos/AUTOMATIC1111/stable-diffusion-webui/branches/master').json()
         if commit != "<none>" and commits['commit']['sha'] != commit:
             print("--------------------------------------------------------")
-            print("| You are not up to date with the most recent release. |")
-            print("| Consider running `git pull` to update.               |")
+            print("| 最新のリリースに更新されていません。                      |")
+            print("| `git pull`を実行して更新してください。                  |")
             print("--------------------------------------------------------")
         elif commits['commit']['sha'] == commit:
-            print("You are up to date with the most recent release.")
+            print("最新のリリースに更新されています。")
         else:
-            print("Not a git clone, can't perform version check.")
+            print("gitのクローンではないので、バージョンチェックができません。")
     except Exception as e:
-        print("version check failed", e)
+        print("バージョンチェックに失敗しました", e)
 
 
 def run_extension_installer(extension_dir):
@@ -234,7 +234,7 @@ def run_extension_installer(extension_dir):
         env = os.environ.copy()
         env['PYTHONPATH'] = f"{script_path}{os.pathsep}{env.get('PYTHONPATH', '')}"
 
-        stdout = run(f'"{python}" "{path_installer}"', errdesc=f"Error running install.py for extension {extension_dir}", custom_env=env).strip()
+        stdout = run(f'"{python}" "{path_installer}"', errdesc=f"拡張機能の install.py の実行中にエラーが発生しました {extension_dir}", custom_env=env).strip()
         if stdout:
             print(stdout)
     except Exception as e:
@@ -250,7 +250,7 @@ def list_extensions(settings_file):
     except FileNotFoundError:
         pass
     except Exception:
-        errors.report(f'\nCould not load settings\nThe config file "{settings_file}" is likely corrupted\nIt has been moved to the "tmp/config.json"\nReverting config to default\n\n''', exc_info=True)
+        errors.report(f'\n設定が読み込めませんでした\n設定ファイル"{settings_file}"は破損している可能性が高いです\n"tmp/config.json"に移動しました\n設定をデフォルトに戻しています...\n\n''', exc_info=True)
         os.replace(settings_file, os.path.join(script_path, "tmp", "config.json"))
 
     disabled_extensions = set(settings.get('disabled_extensions', []))
@@ -373,20 +373,20 @@ def prepare_environment():
     tag = git_tag()
     startup_timer.record("git version info")
 
-    print(f"Python {sys.version}")
-    print(f"Version: {tag}")
-    print(f"Commit hash: {commit}")
+    print(f"バージョン: {tag}")
+    print(f"コミットハッシュ: {commit}")
+    print(f"Python: {sys.version}")
 
     if args.reinstall_torch or not is_installed("torch") or not is_installed("torchvision"):
-        run(f'"{python}" -m {torch_command}', "Installing torch and torchvision", "Couldn't install torch", live=True)
+        run(f'"{python}" -m {torch_command}', "torchとtorchvisionをインストール中...", "torchをインストールできませんでした", live=True)
         startup_timer.record("install torch")
 
     if args.use_ipex:
         args.skip_torch_cuda_test = True
     if not args.skip_torch_cuda_test and not check_run_python("import torch; assert torch.cuda.is_available()"):
         raise RuntimeError(
-            'Torch is not able to use GPU; '
-            'add --skip-torch-cuda-test to COMMANDLINE_ARGS variable to disable this check'
+            'TorchはGPUを使えません; '
+            'このチェックを無効にするには、変数COMMANDLINE_ARGSに --skip-torch-cuda-test を追加してください'
         )
     startup_timer.record("torch GPU test")
 
@@ -444,7 +444,7 @@ def prepare_environment():
         startup_timer.record("update extensions")
 
     if "--exit" in sys.argv:
-        print("Exiting because of --exit argument")
+        print("--exit引数があるので終了します。")
         exit(0)
 
 
@@ -463,7 +463,7 @@ def configure_for_tests():
 
 
 def start():
-    print(f"Launching {'API server' if '--nowebui' in sys.argv else 'Web UI'} with arguments: {shlex.join(sys.argv[1:])}")
+    print(f"{'API server' if '--nowebui' in sys.argv else 'Web UI'} を引数 {shlex.join(sys.argv[1:])} で起動中...")
     import webui
     if '--nowebui' in sys.argv:
         webui.api_only()

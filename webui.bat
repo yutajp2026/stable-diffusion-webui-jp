@@ -74,22 +74,22 @@ goto :endofscript
 :show_stdout_stderr
 
 echo.
-echo exit code: %errorlevel%
+echo 終了コード: %errorlevel%
 
 for /f %%i in ("tmp\stdout.txt") do set size=%%~zi
 if %size% equ 0 goto :show_stderr
 echo.
-echo stdout:
+echo 標準出力:
 type tmp\stdout.txt
 
 :show_stderr
 for /f %%i in ("tmp\stderr.txt") do set size=%%~zi
 if %size% equ 0 goto :show_stderr
 echo.
-echo stderr:
+echo エラー出力:
 type tmp\stderr.txt
 
 :endofscript
 
 echo.
-echo msgbox "起動に失敗しました。" > %TEMP%/msgboxtest.vbs & %TEMP%/msgboxtest.vbs
+echo msgbox "終了します。詳細は黒い画面に表示されています。" > %TEMP%/msgboxtest.vbs & %TEMP%/msgboxtest.vbs
