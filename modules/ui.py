@@ -982,7 +982,7 @@ def create_ui():
                     shuffle_tags = gr.Checkbox(label="プロンプトを作成する際はタグを','でシャッフルしてください。", value=False, elem_id="train_shuffle_tags")
                     tag_drop_out = gr.Slider(minimum=0, maximum=1, step=0.1, label="プロンプト作成時にはタグを外します", value=0, elem_id="train_tag_drop_out")
 
-                    latent_sampling_method = gr.Radio(label="潜在空間サンプリング方法を選択", value="once", choices=['once', 'deterministic', 'random'], elem_id="train_latent_sampling_method")
+                    latent_sampling_method = gr.Radio(label="潜在空間サンプリング方法を選択", value="一度だけ", choices=['一度だけ', '決定論的', 'ランダム'], elem_id="train_latent_sampling_method")
 
                     with gr.Row():
                         train_embedding = gr.Button(value="埋め込み訓練", variant='primary', elem_id="train_train_embedding")
