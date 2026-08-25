@@ -11,16 +11,16 @@ def create_ui():
     with ResizeHandleRow(equal_height=False, variant='compact'):
         with gr.Column(variant='compact'):
             with gr.Tabs(elem_id="mode_extras"):
-                with gr.TabItem('Single Image', id="single_image", elem_id="extras_single_tab") as tab_single:
-                    extras_image = gr.Image(label="Source", source="upload", interactive=True, type="pil", elem_id="extras_image", image_mode="RGBA")
+                with gr.TabItem('シングル画像', id="single_image", elem_id="extras_single_tab") as tab_single:
+                    extras_image = gr.Image(label="ソース", source="upload", interactive=True, type="pil", elem_id="extras_image", image_mode="RGBA")
 
-                with gr.TabItem('Batch Process', id="batch_process", elem_id="extras_batch_process_tab") as tab_batch:
-                    image_batch = gr.Files(label="Batch Process", interactive=True, elem_id="extras_image_batch")
+                with gr.TabItem('バッチ処理', id="batch_process", elem_id="extras_batch_process_tab") as tab_batch:
+                    image_batch = gr.Files(label="バッチ処理", interactive=True, elem_id="extras_image_batch")
 
-                with gr.TabItem('Batch from Directory', id="batch_from_directory", elem_id="extras_batch_directory_tab") as tab_batch_dir:
-                    extras_batch_input_dir = gr.Textbox(label="Input directory", **shared.hide_dirs, placeholder="A directory on the same machine where the server is running.", elem_id="extras_batch_input_dir")
-                    extras_batch_output_dir = gr.Textbox(label="Output directory", **shared.hide_dirs, placeholder="Leave blank to save images to the default path.", elem_id="extras_batch_output_dir")
-                    show_extras_results = gr.Checkbox(label='Show result images', value=True, elem_id="extras_show_extras_results")
+                with gr.TabItem('ディレクトリからバッチ', id="batch_from_directory", elem_id="extras_batch_directory_tab") as tab_batch_dir:
+                    extras_batch_input_dir = gr.Textbox(label="入力ディレクトリ", **shared.hide_dirs, placeholder="サーバーが実行されている同じマシン上のディレクトリ。", elem_id="extras_batch_input_dir")
+                    extras_batch_output_dir = gr.Textbox(label="出力ディレクトリ", **shared.hide_dirs, placeholder="空白のままにすると、デフォルトのパスに画像を保存します。", elem_id="extras_batch_output_dir")
+                    show_extras_results = gr.Checkbox(label='結果画像を表示', value=True, elem_id="extras_show_extras_results")
 
             script_inputs = scripts.scripts_postproc.setup_ui()
 

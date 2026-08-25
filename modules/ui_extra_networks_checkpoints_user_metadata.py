@@ -35,10 +35,10 @@ class CheckpointUserMetadataEditor(ui_extra_networks_user_metadata.UserMetadataE
         self.create_default_editor_elems()
 
         with gr.Row():
-            self.select_vae = gr.Dropdown(choices=["Automatic", "None"] + list(sd_vae.vae_dict), value="None", label="Preferred VAE", elem_id="checpoint_edit_user_metadata_preferred_vae")
+            self.select_vae = gr.Dropdown(choices=["Automatic", "None"] + list(sd_vae.vae_dict), value="None", label="好ましいVAE", elem_id="checpoint_edit_user_metadata_preferred_vae")
             create_refresh_button(self.select_vae, sd_vae.refresh_vae_list, lambda: {"choices": ["Automatic", "None"] + list(sd_vae.vae_dict)}, "checpoint_edit_user_metadata_refresh_preferred_vae")
 
-        self.edit_notes = gr.TextArea(label='Notes', lines=4)
+        self.edit_notes = gr.TextArea(label='ノート', lines=4)
 
         self.create_default_buttons()
 

@@ -49,7 +49,7 @@ class UserMetadataEditor:
         with gr.Row():
             with gr.Column(scale=2):
                 self.edit_name = gr.HTML(elem_classes="extra-network-name")
-                self.edit_description = gr.Textbox(label="Description", lines=4)
+                self.edit_description = gr.Textbox(label="説明", lines=4)
                 self.html_filedata = gr.HTML()
 
                 self.create_extra_default_items_in_left_column()
@@ -60,9 +60,9 @@ class UserMetadataEditor:
     def create_default_buttons(self):
 
         with gr.Row(elem_classes="edit-user-metadata-buttons"):
-            self.button_cancel = gr.Button('Cancel')
-            self.button_replace_preview = gr.Button('Replace preview', variant='primary')
-            self.button_save = gr.Button('Save', variant='primary')
+            self.button_cancel = gr.Button('キャンセル')
+            self.button_replace_preview = gr.Button('プレビューを置き換え', variant='primary')
+            self.button_save = gr.Button('保存', variant='primary')
 
         self.html_status = gr.HTML(elem_classes="edit-user-metadata-status")
 
@@ -112,7 +112,7 @@ class UserMetadataEditor:
 
             return params
         except Exception as e:
-            errors.display(e, f"reading info for {name}")
+            errors.display(e, f"{name}の情報を読んでいます")
             return []
 
     def put_values_into_components(self, name):
@@ -121,7 +121,7 @@ class UserMetadataEditor:
         try:
             params = self.get_metadata_table(name)
         except Exception as e:
-            errors.display(e, f"reading metadata info for {name}")
+            errors.display(e, f"{name}のメタデータ情報を読んでいます")
             params = []
 
         table = '<table class="file-metadata">' + "".join(f"<tr><th>{name}</th><td>{value}</td></tr>" for name, value in params if value is not None) + '</table>'

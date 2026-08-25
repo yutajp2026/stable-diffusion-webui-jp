@@ -206,25 +206,25 @@ class UiLoadsave:
             current_ui_settings[path] = new_value
 
         if num_changed == 0:
-            return "No changes."
+            return "変更なし。"
 
         self.write_to_file(current_ui_settings)
 
-        return f"Wrote {num_changed} changes."
+        return f"{num_changed} 件の変更を書きました。"
 
     def create_ui(self):
         """creates ui elements for editing defaults UI, without adding any logic to them"""
 
         gr.HTML(
-            f"This page allows you to change default values in UI elements on other tabs.<br />"
-            f"Make your changes, press 'View changes' to review the changed default values,<br />"
-            f"then press 'Apply' to write them to {self.filename}.<br />"
-            f"New defaults will apply after you restart the UI.<br />"
+            f"このページでは、他のタブのUI要素のデフォルト値を変更できます。<br />"
+            f"変更を加え、'変更を表示'を押して変更されたデフォルト値を確認し、<br />"
+            f"その後、'適用'を押して {self.filename} に書き込みます。<br />"
+            f"新しいデフォルトはUIを再起動した後に適用されます。<br />"
         )
 
         with gr.Row():
-            self.ui_defaults_view = gr.Button(value='View changes', elem_id="ui_defaults_view", variant="secondary")
-            self.ui_defaults_apply = gr.Button(value='Apply', elem_id="ui_defaults_apply", variant="primary")
+            self.ui_defaults_view = gr.Button(value='変更を表示', elem_id="ui_defaults_view", variant="secondary")
+            self.ui_defaults_apply = gr.Button(value='適用', elem_id="ui_defaults_apply", variant="primary")
 
         self.ui_defaults_review = gr.HTML("")
 

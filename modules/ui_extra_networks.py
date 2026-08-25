@@ -101,12 +101,11 @@ def fetch_file(filename: str = ""):
         raise HTTPException(status_code=404, detail="File not found")
 
     if not any(Path(x).absolute() in Path(filename).absolute().parents for x in allowed_dirs):
-        raise ValueError(f"File cannot be fetched: {filename}. Must be in one of directories registered by extra pages.")
+        raise ValueError(f"ファイルを取得できません: {filename}。 extra pages で登録されたディレクトリのいずれかに存在する必要があります。")
 
     ext = os.path.splitext(filename)[1].lower()[1:]
     if ext not in allowed_preview_extensions():
-        raise ValueError(f"File cannot be fetched: {filename}. Extensions allowed: {allowed_preview_extensions()}.")
-
+        raise ValueError(f"ファイルを取得できません: {filename}. 拡張機能が許可されています: {allowed_preview_extensions()}.")
     # would profit from returning 304
     return FileResponse(filename, headers={"Accept-Ranges": "bytes"})
 
@@ -133,7 +132,7 @@ def fetch_cover_images(page: str = "", item: str = "", index: int = 0):
         image.save(buffer, format=image.format)
         return Response(content=buffer.getvalue(), media_type=image.get_format_mimetype())
     except Exception as err:
-        raise ValueError(f"File cannot be fetched: {item}. Failed to load cover image.") from err
+        raise ValueError(f"ファイルを取得できません: {item}. カバー画像の読み込みに失敗しました。") from err
 
 
 def get_metadata(page: str = "", item: str = ""):
@@ -161,7 +160,7 @@ def get_single_card(page: str = "", tabname: str = "", name: str = ""):
         item = page.create_item(name, enable_filter=False)
         page.items[name] = item
     except Exception as e:
-        errors.display(e, "creating item for extra network")
+        errors.display(e, f"{name}のアイテムを作成しています...")
         item = page.items.get(name)
 
     page.read_user_metadata(item, use_cache=False)
@@ -237,17 +236,16 @@ class ExtraNetworksPage:
         item: dict,
         template: Optional[str] = None,
     ) -> Union[str, dict]:
-        """Generates HTML for a single ExtraNetworks Item.
+        """単一の ExtraNetworks アイテムの HTML を生成します。
 
-        Args:
-            tabname: The name of the active tab.
-            item: Dictionary containing item information.
-            template: Optional template string to use.
+        引数:
+        tabname: アクティブなタブの名前。
+        item: アイテム情報を含む辞書。
+        template: 使用するオプションのテンプレート文字列。
 
-        Returns:
-            If a template is passed: HTML string generated for this item.
-                Can be empty if the item is not meant to be shown.
-            If no template is passed: A dictionary containing the generated item's attributes.
+        戻り値:
+        テンプレートが渡された場合: このアイテムのために生成された HTML 文字列。アイテムが表示されるべきでない場合は空になることがあります。
+        テンプレートが渡されなかった場合: 生成されたアイテムの属性を含む辞書。
         """
         preview = item.get("preview", None)
         style_height = f"height: {shared.opts.extra_networks_card_height}px;" if shared.opts.extra_networks_card_height else ''
@@ -356,9 +354,9 @@ class ExtraNetworksPage:
         dir_path: str,
         content: Optional[str] = None,
     ) -> Optional[str]:
-        """Generates HTML for a directory item in the tree.
+        """ツリー内のディレクトリ項目のHTMLを生成します。
 
-        The generated HTML is of the format:
+        生成されたHTMLは次の形式です:
         ```html
         <li class="tree-list-item tree-list-item--has-subitem">
             <div class="tree-list-content tree-list-content-dir"></div>
@@ -368,13 +366,13 @@ class ExtraNetworksPage:
         </li>
         ```
 
-        Args:
-            tabname: The name of the active tab.
-            dir_path: Path to the directory for this item.
-            content: Optional HTML string that will be wrapped by this <ul>.
+        引数:
+            tabname: アクティブなタブの名前。
+            dir_path: この項目のディレクトリへのパス。
+            content: この <ul> でラップされるオプションの HTML 文字列。
 
-        Returns:
-            HTML formatted string.
+        戻り値:
+            HTML形式の文字列。
         """
         if not content:
             return None
@@ -403,9 +401,9 @@ class ExtraNetworksPage:
         )
 
     def create_tree_file_item_html(self, tabname: str, file_path: str, item: dict) -> str:
-        """Generates HTML for a file item in the tree.
+        """ツリー内のファイル項目のHTMLを生成します。
 
-        The generated HTML is of the format:
+        生成されたHTMLは次の形式です:
         ```html
         <li class="tree-list-item tree-list-item--subitem">
             <span data-filterable-item-text hidden></span>
@@ -413,13 +411,13 @@ class ExtraNetworksPage:
         </li>
         ```
 
-        Args:
-            tabname: The name of the active tab.
-            file_path: The path to the file for this item.
-            item: Dictionary containing the item information.
+        引数:
+            tabname: アクティブなタブの名前。
+            file_path: この項目のファイルへのパス。
+            item: この項目の情報を持つ辞書。
 
-        Returns:
-            HTML formatted string.
+        戻り値:
+            HTML形式の文字列。
         """
         item_html_args = self.create_item_html(tabname, item)
         action_buttons = "".join(
@@ -453,13 +451,13 @@ class ExtraNetworksPage:
         )
 
     def create_tree_view_html(self, tabname: str) -> str:
-        """Generates HTML for displaying folders in a tree view.
+        """ツリー表示でフォルダを表示するためのHTMLを生成します。
 
-        Args:
-            tabname: The name of the active tab.
+        引数:
+            tabname: アクティブなタブの名前。
 
-        Returns:
-            HTML string generated for this tree view.
+        戻り値:
+            このツリービューのために生成されたHTML文字列。
         """
         res = ""
 
@@ -509,7 +507,7 @@ class ExtraNetworksPage:
         return f"<ul class='tree-list tree-list--tree'>{res}</ul>"
 
     def create_dirs_view_html(self, tabname: str) -> str:
-        """Generates HTML for displaying folders."""
+        """フォルダを表示するためのHTMLを生成します。"""
 
         subdirs = {}
         for parentdir in [os.path.abspath(x) for x in self.allowed_directories_for_previews()]:
@@ -755,8 +753,8 @@ def create_ui(interface: gr.Blocks, unrelated_tabs, tabname):
             ui.user_metadata_editors.append(editor)
             related_tabs.append(tab)
 
-    ui.button_save_preview = gr.Button('Save preview', elem_id=f"{tabname}_save_preview", visible=False)
-    ui.preview_target_filename = gr.Textbox('Preview save filename', elem_id=f"{tabname}_preview_filename", visible=False)
+    ui.button_save_preview = gr.Button('プレビューを保存', elem_id=f"{tabname}_save_preview", visible=False)
+    ui.preview_target_filename = gr.Textbox('プレビュー保存ファイル名', elem_id=f"{tabname}_preview_filename", visible=False)
 
     for tab in unrelated_tabs:
         tab.select(fn=None, _js=f"function(){{extraNetworksUnrelatedTabSelected('{tabname}');}}", inputs=[], outputs=[], show_progress=False)
@@ -804,7 +802,7 @@ def setup_ui(ui, gallery):
         # this function is here for backwards compatibility and likely will be removed soon
 
         if len(images) == 0:
-            print("There is no image in gallery to save as a preview.")
+            print("ギャラリーにプレビューとして保存する画像がありません。")
             return [page.create_html(ui.tabname) for page in ui.stored_extra_pages]
 
         index = int(index)
@@ -821,7 +819,7 @@ def setup_ui(ui, gallery):
                 is_allowed = True
                 break
 
-        assert is_allowed, f'writing to {filename} is not allowed'
+        assert is_allowed, f'{filename}への書き込みは許可されていません。'
 
         save_image_with_geninfo(image, geninfo, filename)
 

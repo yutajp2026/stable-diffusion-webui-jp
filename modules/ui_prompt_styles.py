@@ -60,26 +60,26 @@ class UiPromptStyles:
         self.main_ui_negative_prompt = main_ui_negative_prompt
 
         with gr.Row(elem_id=f"{tabname}_styles_row"):
-            self.dropdown = gr.Dropdown(label="Styles", show_label=False, elem_id=f"{tabname}_styles", choices=list(shared.prompt_styles.styles), value=[], multiselect=True, tooltip="Styles")
-            edit_button = ui_components.ToolButton(value=styles_edit_symbol, elem_id=f"{tabname}_styles_edit_button", tooltip="Edit styles")
+            self.dropdown = gr.Dropdown(label="スタイル", show_label=False, elem_id=f"{tabname}_styles", choices=list(shared.prompt_styles.styles), value=[], multiselect=True, tooltip="Styles")
+            edit_button = ui_components.ToolButton(value=styles_edit_symbol, elem_id=f"{tabname}_styles_edit_button", tooltip="スタイルを編集")
 
         with gr.Box(elem_id=f"{tabname}_styles_dialog", elem_classes="popup-dialog") as styles_dialog:
             with gr.Row():
-                self.selection = gr.Dropdown(label="Styles", elem_id=f"{tabname}_styles_edit_select", choices=list(shared.prompt_styles.styles), value=[], allow_custom_value=True, info="Styles allow you to add custom text to prompt. Use the {prompt} token in style text, and it will be replaced with user's prompt when applying style. Otherwise, style's text will be added to the end of the prompt.")
+                self.selection = gr.Dropdown(label="スタイル", elem_id=f"{tabname}_styles_edit_select", choices=list(shared.prompt_styles.styles), value=[], allow_custom_value=True, info="スタイルを使うと、プロンプトにカスタムテキストを追加できます。スタイルのテキストで {prompt} トークンを使用すると、スタイルを適用したときにユーザーのプロンプトに置き換えられます。それ以外の場合、スタイルのテキストはプロンプトの末尾に追加されます。")
                 ui_common.create_refresh_button([self.dropdown, self.selection], shared.prompt_styles.reload, lambda: {"choices": list(shared.prompt_styles.styles)}, f"refresh_{tabname}_styles")
-                self.materialize = ui_components.ToolButton(value=styles_materialize_symbol, elem_id=f"{tabname}_style_apply_dialog", tooltip="Apply all selected styles from the style selection dropdown in main UI to the prompt.")
-                self.copy = ui_components.ToolButton(value=styles_copy_symbol, elem_id=f"{tabname}_style_copy", tooltip="Copy main UI prompt to style.")
+                self.materialize = ui_components.ToolButton(value=styles_materialize_symbol, elem_id=f"{tabname}_style_apply_dialog", tooltip="メインUIのスタイル選択ドロップダウンから選択したすべてのスタイルをプロンプトに適用します。")
+                self.copy = ui_components.ToolButton(value=styles_copy_symbol, elem_id=f"{tabname}_style_copy", tooltip="メインUIプロンプトをスタイルにコピー。")
 
             with gr.Row():
-                self.prompt = gr.Textbox(label="Prompt", show_label=True, elem_id=f"{tabname}_edit_style_prompt", lines=3, elem_classes=["prompt"])
+                self.prompt = gr.Textbox(label="プロンプト", show_label=True, elem_id=f"{tabname}_edit_style_prompt", lines=3, elem_classes=["prompt"])
 
             with gr.Row():
-                self.neg_prompt = gr.Textbox(label="Negative prompt", show_label=True, elem_id=f"{tabname}_edit_style_neg_prompt", lines=3, elem_classes=["prompt"])
+                self.neg_prompt = gr.Textbox(label="ネガティブプロンプト", show_label=True, elem_id=f"{tabname}_edit_style_neg_prompt", lines=3, elem_classes=["prompt"])
 
             with gr.Row():
-                self.save = gr.Button('Save', variant='primary', elem_id=f'{tabname}_edit_style_save', visible=False)
-                self.delete = gr.Button('Delete', variant='primary', elem_id=f'{tabname}_edit_style_delete', visible=False)
-                self.close = gr.Button('Close', variant='secondary', elem_id=f'{tabname}_edit_style_close')
+                self.save = gr.Button('保存', variant='primary', elem_id=f'{tabname}_edit_style_save', visible=False)
+                self.delete = gr.Button('削除', variant='primary', elem_id=f'{tabname}_edit_style_delete', visible=False)
+                self.close = gr.Button('閉じる', variant='secondary', elem_id=f'{tabname}_edit_style_close')
 
         self.selection.change(
             fn=select_style,
@@ -97,7 +97,7 @@ class UiPromptStyles:
 
         self.delete.click(
             fn=delete_style,
-            _js='function(name){ if(name == "") return ""; return confirm("Delete style " + name + "?") ? name : ""; }',
+            _js='function(name){ if(name == "") return ""; return confirm("スタイルを削除 " + name + "?") ? name : ""; }',
             inputs=[self.selection],
             outputs=[self.selection, self.prompt, self.neg_prompt],
             show_progress=False,
