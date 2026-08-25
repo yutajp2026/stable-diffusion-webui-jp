@@ -184,23 +184,23 @@ def create_output_panel(tabname, outdir, toprow=None):
 
         with gr.Column(variant='panel', elem_id=f"{tabname}_results_panel"):
             with gr.Group(elem_id=f"{tabname}_gallery_container"):
-                res.gallery = gr.Gallery(label='Output', show_label=False, elem_id=f"{tabname}_gallery", columns=4, preview=True, height=shared.opts.gallery_height or None)
+                res.gallery = gr.Gallery(label='出力', show_label=False, elem_id=f"{tabname}_gallery", columns=4, preview=True, height=shared.opts.gallery_height or None)
 
             with gr.Row(elem_id=f"image_buttons_{tabname}", elem_classes="image-buttons"):
-                open_folder_button = ToolButton(folder_symbol, elem_id=f'{tabname}_open_folder', visible=not shared.cmd_opts.hide_ui_dir_config, tooltip="Open images output directory.")
+                open_folder_button = ToolButton(folder_symbol, elem_id=f'{tabname}_open_folder', visible=not shared.cmd_opts.hide_ui_dir_config, tooltip="画像の出力フォルダを開く")
 
                 if tabname != "extras":
-                    save = ToolButton('💾', elem_id=f'save_{tabname}', tooltip=f"Save the image to a dedicated directory ({shared.opts.outdir_save}).")
-                    save_zip = ToolButton('🗃️', elem_id=f'save_zip_{tabname}', tooltip=f"Save zip archive with images to a dedicated directory ({shared.opts.outdir_save})")
+                    save = ToolButton('💾', elem_id=f'save_{tabname}', tooltip=f"画像を専用ディレクトリに保存します ({shared.opts.outdir_save})。")
+                    save_zip = ToolButton('🗃️', elem_id=f'save_zip_{tabname}', tooltip=f"画像を専用のディレクトリにZIPアーカイブとして保存します ({shared.opts.outdir_save})。")
 
                 buttons = {
-                    'img2img': ToolButton('🖼️', elem_id=f'{tabname}_send_to_img2img', tooltip="Send image and generation parameters to img2img tab."),
-                    'inpaint': ToolButton('🎨️', elem_id=f'{tabname}_send_to_inpaint', tooltip="Send image and generation parameters to img2img inpaint tab."),
-                    'extras': ToolButton('📐', elem_id=f'{tabname}_send_to_extras', tooltip="Send image and generation parameters to extras tab.")
+                    'img2img': ToolButton('🖼️', elem_id=f'{tabname}_send_to_img2img', tooltip="画像と生成パラメータをimg2imgタブに送信します。"),
+                    'inpaint': ToolButton('🎨️', elem_id=f'{tabname}_send_to_inpaint', tooltip="画像と生成パラメータをimg2img inpaintタブに送信します。"),
+                    'extras': ToolButton('📐', elem_id=f'{tabname}_send_to_extras', tooltip="画像と生成パラメータをextrasタブに送信します。")
                 }
 
                 if tabname == 'txt2img':
-                    res.button_upscale = ToolButton('✨', elem_id=f'{tabname}_upscale', tooltip="Create an upscaled version of the current image using hires fix settings.")
+                    res.button_upscale = ToolButton('✨', elem_id=f'{tabname}_upscale', tooltip="現在の画像の拡大版を作成します(高解像度修正設定を使用)。")
 
             open_folder_button.click(
                 fn=lambda images, index: open_folder(shared.opts.outdir_samples or outdir, images, index),
@@ -300,7 +300,7 @@ def create_refresh_button(refresh_component, refresh_method, refreshed_args, ele
 
         return [gr.update(**(args or {})) for _ in refresh_components] if len(refresh_components) > 1 else gr.update(**(args or {}))
 
-    refresh_button = ToolButton(value=refresh_symbol, elem_id=elem_id, tooltip=f"{label}: refresh" if label else "Refresh")
+    refresh_button = ToolButton(value=refresh_symbol, elem_id=elem_id, tooltip=f"{label}: リフレッシュ" if label else "リフレッシュ")
     refresh_button.click(
         fn=refresh,
         inputs=[],

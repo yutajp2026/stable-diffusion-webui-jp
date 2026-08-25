@@ -272,7 +272,7 @@ def create_ui():
         extra_tabs = gr.Tabs(elem_id="txt2img_extra_tabs", elem_classes=["extra-networks"])
         extra_tabs.__enter__()
 
-        with gr.Tab("Generation", id="txt2img_generation") as txt2img_generation_tab, ResizeHandleRow(equal_height=False):
+        with gr.Tab("生成", id="txt2img_generation") as txt2img_generation_tab, ResizeHandleRow(equal_height=False):
             with ExitStack() as stack:
                 if shared.opts.txt2img_settings_accordion:
                     stack.enter_context(gr.Accordion("Open for Settings", open=False))
@@ -505,7 +505,7 @@ def create_ui():
         extra_tabs = gr.Tabs(elem_id="img2img_extra_tabs", elem_classes=["extra-networks"])
         extra_tabs.__enter__()
 
-        with gr.Tab("Generation", id="img2img_generation") as img2img_generation_tab, ResizeHandleRow(equal_height=False):
+        with gr.Tab("生成", id="img2img_generation") as img2img_generation_tab, ResizeHandleRow(equal_height=False):
             with ExitStack() as stack:
                 if shared.opts.img2img_settings_accordion:
                     stack.enter_context(gr.Accordion("Open for Settings", open=False))
@@ -968,7 +968,7 @@ def create_ui():
                     training_width = gr.Slider(minimum=64, maximum=2048, step=8, label="幅", value=512, elem_id="train_training_width")
                     training_height = gr.Slider(minimum=64, maximum=2048, step=8, label="高さ", value=512, elem_id="train_training_height")
                     varsize = gr.Checkbox(label="画像のリサイズを行わない", value=False, elem_id="train_varsize")
-                    steps = gr.Number(label='Max steps', value=100000, precision=0, elem_id="train_steps")
+                    steps = gr.Number(label='最大ステップ数', value=100000, precision=0, elem_id="train_steps")
 
                     with FormRow():
                         create_image_every = gr.Number(label='画像をログディレクトリにNステップごとに保存する、0で無効にします', value=500, precision=0, elem_id="train_create_image_every")
@@ -995,7 +995,7 @@ def create_ui():
 
             with gr.Column(elem_id='ti_gallery_container'):
                 ti_output = gr.Text(elem_id="ti_output", value="", show_label=False)
-                gr.Gallery(label='Output', show_label=False, elem_id='ti_gallery', columns=4)
+                gr.Gallery(label='出力', show_label=False, elem_id='ti_gallery', columns=4)
                 gr.HTML(elem_id="ti_progress", value="")
                 ti_outcome = gr.HTML(elem_id="ti_error", value="")
 
