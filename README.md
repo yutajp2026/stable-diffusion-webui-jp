@@ -1,19 +1,19 @@
 # Stable Diffusion web UI Japanese
-([元のファイル](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/README.md)を日本語訳+α)
+([元のファイル](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/README.md))
 
-Gradio ライブラリで実装された Stable Diffusion 用の Web インターフェースです。
+Gradio ライブラリで実装された Stable Diffusion 用の Web インターフェースを日本語訳したものです。
 
 ![](screenshot.png)
 
 ## 機能
 [画像付きの詳しい機能紹介](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features):
 - 従来の txt2img モードと img2img モード
-- ワンクリックでインストールと実行ができるスクリプト（ただし Python と Git は別途インストールが必要）
-- Outpainting
-- Inpainting
-- Color Sketch
-- Prompt Matrix
-- Stable Diffusion Upscale
+- ワンクリックインストールで実行ができるスクリプト（ただし方法によっては Git は別途インストールが必要）
+- アウトペインティング
+- インペインティング
+- カラースケッチ
+- プロンプトマトリックス
+- Stable Diffusionアップスケール
 - Attention: モデルにより強く注目させるテキスト部分を指定
     - `((tuxedo))` を含む男性: tuxedo により強く注目
     - `(tuxedo:1.21)` を含む男性: 別の記法
@@ -21,10 +21,10 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - Loopback: img2img 処理を複数回実行
 - X/Y/Z plot: 異なるパラメーターの画像を 3 次元プロットで表示
 - Textual Inversion
-    - 任意の数の embedding を好きな名前で使用
-    - トークンごとに異なるベクトル数の embedding を複数使用
+    - 任意の数の埋め込みを好きな名前で使用
+    - トークンごとに異なるベクトル数の埋め込みを複数使用
     - 半精度浮動小数点数に対応
-    - 8GB の VRAM で embedding を学習（6GB で動作したという報告もあり）
+    - 8GB の VRAM で埋め込みを学習（6GB で動作したという報告もあり）
 - Extras タブ:
     - GFPGAN: 顔を補正するニューラルネットワーク
     - CodeFormer: GFPGAN の代替となる顔修復ツール
@@ -34,7 +34,7 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
     - LDSR: Latent Diffusion による超解像アップスケーリング
 - アスペクト比を変更するオプション
 - サンプリング手法の選択
-    - sampler の eta 値（ノイズ倍率）を調整
+    - サンプラーの eta 値（ノイズ倍率）を調整
     - より高度なノイズ設定
 - いつでも処理を中断
 - 4GB のビデオカードに対応（2GB で動作したという報告もあり）
@@ -48,7 +48,7 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
      - 画像やテキスト形式のパラメーターをプロンプト欄へドラッグ＆ドロップ
 - 「Read Generation Parameters」ボタンで、プロンプト欄のパラメーターを UI に読み込み
 - 設定ページ
-- UI から任意の Python コードを実行（有効化には `--allow-code` が必要）
+- UI から任意の Python コードを実行（有効化には後述の引数 `--allow-code` が必要）
 - ほとんどの UI 要素にマウスオーバーヒントを表示
 - テキスト設定で UI 要素の default、min、max、step 値を変更
 - テクスチャのようにタイル化できる画像を作成する Tiling 対応
@@ -75,12 +75,12 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - 拡張機能: [History tab](https://github.com/yfszzx/stable-diffusion-webui-images-browser) で UI から画像の表示、直接操作、削除
 - 無限生成オプション
 - Training タブ
-    - hypernetwork と embedding のオプション
+    - hypernetwork と埋め込みのオプション
     - 画像の前処理: BLIP または deepdanbooru（アニメ向け）によるトリミング、反転、自動タグ付け
 - Clip skip
 - Hypernetwork
 - Lora（Hypernetwork と同様ですが、より扱いやすい機能）
-- embedding、hypernetwork、Lora をプレビュー付きで選択してプロンプトに追加できる専用 UI
+- 埋め込み、hypernetwork、Lora をプレビュー付きで選択してプロンプトに追加できる専用 UI
 - 設定画面から別の VAE を読み込み可能
 - プログレスバーに完了予定時間を表示
 - API
@@ -89,31 +89,36 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - ~~[Stable Diffusion 2.0](https://github.com/Stability-AI/stablediffusion)~~ (開けません) に対応（手順は [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#stable-diffusion-20) を参照）
 - [Alt-Diffusion](https://arxiv.org/abs/2211.06679) に対応（手順は [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#alt-diffusion) を参照）
 - 不適切な文字を含まない生成
-- safetensors 形式の checkpoint を読み込み
+- safetensors 形式のチェックポイントを読み込み
 - 解像度の制限を緩和: 生成画像の寸法は 64 の倍数ではなく 8 の倍数であれば可
 - ライセンスを付与
 - 設定画面から UI 要素の順序を変更
 - [Segmind Stable Diffusion](https://huggingface.co/segmind/SSD-1B) に対応
 
-## インストールと実行
+## ドキュメント
+ドキュメントはこの README からプロジェクトの [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki) に移動しました。
 
+Google などの検索エンジンが wiki をクロールできるように、（人間向けではない）[クロール用 wiki](https://github-wiki-see.page/m/AUTOMATIC1111/stable-diffusion-webui/wiki) へのリンクを掲載します。
+
+## インストールと実行
 ### Windows 10/11 へのインストール
 ℹ️周知しておきたい内容
 - 公式ではいろいろなGPU別にインストール方法が載っていますが、リポジトリが存在しない問題(後述)に悩まされるのでここでは記載しません。
 - アプリ版ではNvidia GPU搭載か(`nvidia-smi`を実行できるか)を自動で判断してくれるようにしました。非搭載のPCで自動インストールする場合、`set COMMANDLINE_ARGS=--use-cpu all --precision full --no-half --skip-torch-cuda-test`でコマンドライン引数(後述)を設定します。
-- Pythonはwebui.batにて自動でインストールされるようにしました。
+- Pythonはwebui.batにて自動でインストールされるようにしました(Windowsアプリ版以外はPythonが実行できない場合に限る)。
 - Pythonのバージョンが競合する場合は環境変数Pathから使わないPythonのパスを削除するとよいです。
 
-**アプリ版(Windows推奨)**:
+**リリースアプリ版(Windows推奨)**:
 
-公開予定
+2026年内公開予定
 
-自動インストール(とても大変):
+自動インストール(いろいろ大変):
 1. [Git](https://git-scm.com/download/win) をインストールします。(`winget install --id Git.Git -e --source winget`を実行するのがよい)
-2. stable-diffusion-webui リポジトリをダウンロードします。たとえば `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp.git` を実行します。
-3. `set (変数)=(値)`のかたちで変数(後述)を設定し、Windows Explorer から、管理者権限ではない通常のユーザーとして `webui.bat` を実行します。
+2. このリポジトリをダウンロードします。たとえば `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp.git` を実行します。
+3. 必要に応じて変数(後述)を`set (変数)=(値)`のかたちで設定します。
+4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します。
 
-### Linux へのインストール
+### Linux への自動インストール
 1. 依存関係をインストールします:
 ```bash
 # Debian-based:
@@ -147,27 +152,23 @@ python_cmd="python3.11"
 git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
 ```
 
-3. `webui.sh` を実行します。
-4. 変数(後述)については `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定してください。
+3. 必要に応じて変数(後述)を `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定します。
+4. `webui.sh` を実行します。
 
 ### 変数
 - コマンドライン引数(COMMANDLINE_ARGS)については、-hに設定すると一覧を簡単に確認できます。
 - 公式ではおそらく言及されていませんが、ACCELERATEを"True"に設定するとaccelerateで実行できます。[accelerateの詳細](https://self-development.info/%e3%80%90pytorch%e3%80%91accelerate%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%81%a8%e8%a8%ad%e5%ae%9a/)
 
 それ以外の変数は[wiki参照](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings)
+
 ## コントリビューション
 このリポジトリにコードを追加する方法は、[コントリビューションガイド](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Contributing)を参照してください。
-
-## ドキュメント
-
-ドキュメントはこの README からプロジェクトの [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki) に移動しました。
-
-Google などの検索エンジンが wiki をクロールできるように、（人間向けではない）[クロール用 wiki](https://github-wiki-see.page/m/AUTOMATIC1111/stable-diffusion-webui/wiki) へのリンクを掲載します。
 
 ## クレジット
 借用したコードのライセンスは `Settings -> Licenses` 画面、および `html/licenses.html` ファイルで確認できます。
 
-- Stable Diffusion - ~~https://github.com/Stability-AI/stablediffusion~~ 存在しないのでこちらに変更https://github.com/w-e-w/stablediffusion, https://github.com/CompVis/taming-transformers, https://github.com/mcmonkey4eva/sd3-ref
+- [(クローン元のスクリプト)](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+- Stable Diffusion - https://github.com/w-e-w/stablediffusion, https://github.com/CompVis/taming-transformers, https://github.com/mcmonkey4eva/sd3-ref
 - k-diffusion - https://github.com/crowsonkb/k-diffusion.git
 - Spandrel - https://github.com/chaiNNer-org/spandrel による実装
   - GFPGAN - https://github.com/TencentARC/GFPGAN.git
@@ -178,7 +179,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 - LDSR - https://github.com/Hafiidz/latent-diffusion
 - MiDaS - https://github.com/isl-org/MiDaS
 - 最適化のアイデア - https://github.com/basujindal/stable-diffusion
-- Cross Attention レイヤーの最適化 - Doggettx - https://github.com/Doggettx/stable-diffusion, prompt editing の原案
+- Cross Attention レイヤーの最適化 - Doggettx - https://github.com/Doggettx/stable-diffusion, プロンプト編集の原案
 - Cross Attention レイヤーの最適化 - InvokeAI、lstein - https://github.com/invoke-ai/InvokeAI (元は http://github.com/lstein/stable-diffusion)
 - Textual Inversion - Rinon Gal - https://github.com/rinongal/textual_inversion （コードは使用していませんが、アイデアを採用しています）
 - SD upscale のアイデア - https://github.com/jquesnelle/txt2imghd
