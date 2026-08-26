@@ -41,7 +41,7 @@ class FaceRestorerGFPGAN(face_restoration_utils.CommonFaceRestoration):
                     device=self.get_device(),
                     expected_architecture='GFPGAN',
                 ).model
-        raise ValueError("No GFPGAN model found")
+        raise ValueError("GFPGANモデルが見つかりませんでした。")
 
     def restore(self, np_image):
         def restore_face(cropped_face_t):
@@ -54,7 +54,7 @@ class FaceRestorerGFPGAN(face_restoration_utils.CommonFaceRestoration):
 def gfpgan_fix_faces(np_image):
     if gfpgan_face_restorer:
         return gfpgan_face_restorer.restore(np_image)
-    logger.warning("GFPGAN face restorer not set up")
+    logger.warning("GFPGANフェイス修復ツールが設定されていません。")
     return np_image
 
 
@@ -66,4 +66,4 @@ def setup_model(dirname: str) -> None:
         gfpgan_face_restorer = FaceRestorerGFPGAN(model_path=dirname)
         shared.face_restorers.append(gfpgan_face_restorer)
     except Exception:
-        errors.report("Error setting up GFPGAN", exc_info=True)
+        errors.report("GFPGANのセットアップに失敗しました", exc_info=True)

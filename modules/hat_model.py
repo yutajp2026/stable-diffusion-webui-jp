@@ -23,7 +23,7 @@ class UpscalerHAT(Upscaler):
         try:
             model = self.load_model(selected_model)
         except Exception as e:
-            print(f"Unable to load HAT model {selected_model}: {e}", file=sys.stderr)
+            print(f"HATモデル {selected_model} をロードできません: {e}", file=sys.stderr)
             return img
         model.to(devices.device_esrgan)  # TODO: should probably be device_hat
         return upscale_with_model(
@@ -35,7 +35,7 @@ class UpscalerHAT(Upscaler):
 
     def load_model(self, path: str):
         if not os.path.isfile(path):
-            raise FileNotFoundError(f"Model file {path} not found")
+            raise FileNotFoundError(f"モデルファイル {path} が見つかりません")
         return modelloader.load_spandrel_model(
             path,
             device=devices.device_esrgan,  # TODO: should probably be device_hat

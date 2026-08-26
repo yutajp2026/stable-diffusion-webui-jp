@@ -30,7 +30,7 @@ def run_pnginfo(image):
 """.strip()+"\n"
 
     if len(info) == 0:
-        message = "Nothing found in the image."
+        message = "画像に何も見つかりませんでした。"
         info = f"<div><p>{message}<p></div>"
 
     return '', geninfo, info
@@ -130,17 +130,17 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
     shared.state.job_count = (1 if theta_func1 else 0) + (1 if theta_func2 else 0)
 
     if not primary_model_name:
-        return fail("Failed: Merging requires a primary model.")
+        return fail("失敗しました：マージには主要なモデルが必要です。")
 
     primary_model_info = sd_models.checkpoints_list[primary_model_name]
 
     if theta_func2 and not secondary_model_name:
-        return fail("Failed: Merging requires a secondary model.")
+        return fail("失敗しました：マージにはセカンダリモデルが必要です。")
 
     secondary_model_info = sd_models.checkpoints_list[secondary_model_name] if theta_func2 else None
 
     if theta_func1 and not tertiary_model_name:
-        return fail(f"Failed: Interpolation method ({interp_method}) requires a tertiary model.")
+        return fail(f"失敗しました：補間手法 ({interp_method}) には第三のモデルが必要です。")
 
     tertiary_model_info = sd_models.checkpoints_list[tertiary_model_name] if theta_func1 else None
 
@@ -148,18 +148,18 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
     result_is_instruct_pix2pix_model = False
 
     if theta_func2:
-        shared.state.textinfo = "Loading B"
-        print(f"Loading {secondary_model_info.filename}...")
+        shared.state.textinfo = "Bをロード中"
+        print(f"ロード中 {secondary_model_info.filename}...")
         theta_1 = sd_models.read_state_dict(secondary_model_info.filename, map_location='cpu')
     else:
         theta_1 = None
 
     if theta_func1:
-        shared.state.textinfo = "Loading C"
-        print(f"Loading {tertiary_model_info.filename}...")
+        shared.state.textinfo = "Cをロード中"
+        print(f"ロード中 {tertiary_model_info.filename}...")
         theta_2 = sd_models.read_state_dict(tertiary_model_info.filename, map_location='cpu')
 
-        shared.state.textinfo = 'Merging B and C'
+        shared.state.textinfo = 'BとCをマージ中'
         shared.state.sampling_steps = len(theta_1.keys())
         for key in tqdm.tqdm(theta_1.keys()):
             if key in checkpoint_dict_skip_on_merge:
@@ -177,12 +177,12 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
 
         shared.state.nextjob()
 
-    shared.state.textinfo = f"Loading {primary_model_info.filename}..."
-    print(f"Loading {primary_model_info.filename}...")
+    shared.state.textinfo = f"ロード中 {primary_model_info.filename}..."
+    print(f"ロード中 {primary_model_info.filename}...")
     theta_0 = sd_models.read_state_dict(primary_model_info.filename, map_location='cpu')
 
     print("Merging...")
-    shared.state.textinfo = 'Merging A and B'
+    shared.state.textinfo = 'AとBをマージ中'
     shared.state.sampling_steps = len(theta_0.keys())
     for key in tqdm.tqdm(theta_0.keys()):
         if theta_1 and 'model' in key and key in theta_1:
@@ -206,7 +206,7 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
                     theta_0[key][:, 0:4, :, :] = theta_func2(a[:, 0:4, :, :], b, multiplier)#Merge only the vectors the models have in common.  Otherwise we get an error due to dimension mismatch.
                     result_is_instruct_pix2pix_model = True
                 else:
-                    assert a.shape[1] == 9 and b.shape[1] == 4, f"Bad dimensions for merged layer {key}: A={a.shape}, B={b.shape}"
+                    assert a.shape[1] == 9 and b.shape[1] == 4, f"マージされたレイヤーのサイズが不正です {key}: A={a.shape}, B={b.shape}"
                     theta_0[key][:, 0:4, :, :] = theta_func2(a[:, 0:4, :, :], b, multiplier)
                     result_is_inpainting_model = True
             else:
@@ -220,8 +220,8 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
 
     bake_in_vae_filename = sd_vae.vae_dict.get(bake_in_vae, None)
     if bake_in_vae_filename is not None:
-        print(f"Baking in VAE from {bake_in_vae_filename}")
-        shared.state.textinfo = 'Baking in VAE'
+        print(f"{bake_in_vae_filename}からVAEでのベーキング")
+        shared.state.textinfo = 'VAEでのベーキング中'
         vae_dict = sd_vae.load_vae_dict(bake_in_vae_filename, map_location='cpu')
 
         for key in vae_dict.keys():
@@ -251,8 +251,8 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
     output_modelname = os.path.join(ckpt_dir, filename)
 
     shared.state.nextjob()
-    shared.state.textinfo = "Saving"
-    print(f"Saving to {output_modelname}...")
+    shared.state.textinfo = "保存中"
+    print(f"保存中 {output_modelname}...")
 
     metadata = {}
 
@@ -268,7 +268,7 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
         try:
             metadata.update(json.loads(metadata_json))
         except Exception as e:
-            errors.display(e, "readin metadata from json")
+            errors.display(e, "JSONからメタデータを読み込む")
 
         metadata["format"] = "pt"
 
@@ -323,8 +323,8 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
 
     create_config(output_modelname, config_source, primary_model_info, secondary_model_info, tertiary_model_info)
 
-    print(f"Checkpoint saved to {output_modelname}.")
-    shared.state.textinfo = "Checkpoint saved"
+    print(f"チェックポイントが保存されました {output_modelname}.")
+    shared.state.textinfo = "チェックポイントが保存されました"
     shared.state.end()
 
-    return [*[gr.Dropdown.update(choices=sd_models.checkpoint_tiles()) for _ in range(4)], "Checkpoint saved to " + output_modelname]
+    return [*[gr.Dropdown.update(choices=sd_models.checkpoint_tiles()) for _ in range(4)], "チェックポイントが保存されました " + output_modelname]

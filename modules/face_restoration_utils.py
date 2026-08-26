@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 def bgr_image_to_rgb_tensor(img: np.ndarray) -> torch.Tensor:
     """Convert a BGR NumPy image in [0..1] range to a PyTorch RGB float32 tensor."""
-    assert img.shape[2] == 3, "image must be RGB"
+    assert img.shape[2] == 3, "画像はRGBでなければなりません"
     if img.dtype == "float64":
         img = img.astype("float32")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -32,7 +32,7 @@ def rgb_tensor_to_bgr_image(tensor: torch.Tensor, *, min_max=(0.0, 1.0)) -> np.n
     """
     tensor = tensor.squeeze(0).float().detach().cpu().clamp_(*min_max)
     tensor = (tensor - min_max[0]) / (min_max[1] - min_max[0])
-    assert tensor.dim() == 3, "tensor must be RGB"
+    assert tensor.dim() == 3, "テンソルはRGBでなければなりません"
     img_np = tensor.numpy().transpose(1, 2, 0)
     if img_np.shape[2] == 1:  # gray image, no RGB/BGR required
         return np.squeeze(img_np, axis=2)
@@ -70,7 +70,7 @@ def restore_with_face_helper(
     original_resolution = np_image.shape[0:2]
 
     try:
-        logger.debug("Detecting faces...")
+        logger.debug("顔を検出しています...")
         face_helper.clean_all()
         face_helper.read_image(np_image)
         face_helper.get_face_landmarks_5(only_center_face=False, resize=640, eye_dist_threshold=5)
@@ -86,13 +86,13 @@ def restore_with_face_helper(
                     cropped_face_t = restore_face(cropped_face_t)
                 devices.torch_gc()
             except Exception:
-                errors.report('Failed face-restoration inference', exc_info=True)
+                errors.report('顔修復の推論に失敗しました', exc_info=True)
 
             restored_face = rgb_tensor_to_bgr_image(cropped_face_t, min_max=(-1, 1))
             restored_face = (restored_face * 255.0).astype('uint8')
             face_helper.add_restored_face(restored_face)
 
-        logger.debug("Merging restored faces into image")
+        logger.debug("復元された顔を画像に統合しています...")
         face_helper.get_inverse_affine(None)
         img = face_helper.paste_faces_to_input_image()
         img = img[:, :, ::-1]
@@ -104,7 +104,7 @@ def restore_with_face_helper(
                 fy=original_resolution[0] / img.shape[0],
                 interpolation=cv2.INTER_LINEAR,
             )
-        logger.debug("Face restoration complete")
+        logger.debug("顔修復が完了しました")
     finally:
         face_helper.clean_all()
     return img
@@ -135,10 +135,10 @@ class CommonFaceRestoration(face_restoration.FaceRestoration):
             self.face_helper.face_parse.to(device)
 
     def get_device(self):
-        raise NotImplementedError("get_device must be implemented by subclasses")
+        raise NotImplementedError("get_device はサブクラスによって実装されなければなりません")
 
     def load_net(self) -> torch.Module:
-        raise NotImplementedError("load_net must be implemented by subclasses")
+        raise NotImplementedError("load_net はサブクラスによって実装されなければなりません")
 
     def restore_with_helper(
         self,
@@ -149,7 +149,7 @@ class CommonFaceRestoration(face_restoration.FaceRestoration):
             if self.net is None:
                 self.net = self.load_net()
         except Exception:
-            logger.warning("Unable to load face-restoration model", exc_info=True)
+            logger.warning("顔修復モデルをロードできません", exc_info=True)
             return np_image
 
         try:

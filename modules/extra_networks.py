@@ -115,7 +115,7 @@ def lookup_extra_networks(extra_network_data):
             extra_network = alias
 
         if extra_network is None:
-            logging.info(f"Skipping unknown extra network: {extra_network_name}")
+            logging.info(f"不明な追加ネットワークをスキップしています: {extra_network_name}")
             continue
 
         res.setdefault(extra_network, []).extend(extra_network_args)
@@ -135,7 +135,7 @@ def activate(p, extra_network_data):
             extra_network.activate(p, extra_network_args)
             activated.append(extra_network)
         except Exception as e:
-            errors.display(e, f"activating extra network {extra_network.name} with arguments {extra_network_args}")
+            errors.display(e, f"引数 {extra_network_args} で追加ネットワーク {extra_network.name} を有効化しています")
 
     for extra_network_name, extra_network in extra_network_registry.items():
         if extra_network in activated:
@@ -144,7 +144,7 @@ def activate(p, extra_network_data):
         try:
             extra_network.activate(p, [])
         except Exception as e:
-            errors.display(e, f"activating extra network {extra_network_name}")
+            errors.display(e, f"追加ネットワーク {extra_network_name} を有効化しています")
 
     if p.scripts is not None:
         p.scripts.after_extra_networks_activate(p, batch_number=p.iteration, prompts=p.prompts, seeds=p.seeds, subseeds=p.subseeds, extra_network_data=extra_network_data)
@@ -160,7 +160,7 @@ def deactivate(p, extra_network_data):
         try:
             extra_network.deactivate(p)
         except Exception as e:
-            errors.display(e, f"deactivating extra network {extra_network.name}")
+            errors.display(e, f"追加ネットワークを無効化しています {extra_network.name}")
 
     for extra_network_name, extra_network in extra_network_registry.items():
         if extra_network in data:
@@ -169,7 +169,7 @@ def deactivate(p, extra_network_data):
         try:
             extra_network.deactivate(p)
         except Exception as e:
-            errors.display(e, f"deactivating unmentioned extra network {extra_network_name}")
+            errors.display(e, f"言及されていない追加ネットワークを無効化しています {extra_network_name}")
 
 
 re_extra_net = re.compile(r"<(\w+):([^>]+)>")
@@ -220,6 +220,6 @@ def get_user_metadata(filename, lister=None):
             with open(metadata_filename, "r", encoding="utf8") as file:
                 metadata = json.load(file)
     except Exception as e:
-        errors.display(e, f"reading extra network user metadata from {metadata_filename}")
+        errors.display(e, f"追加ネットワークのユーザーメタデータを読み込み中 {metadata_filename}")
 
     return metadata

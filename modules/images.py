@@ -188,8 +188,8 @@ def draw_grid_annotations(im, width, height, hor_texts, ver_texts, margin=0):
     cols = im.width // width
     rows = im.height // height
 
-    assert cols == len(hor_texts), f'bad number of horizontal texts: {len(hor_texts)}; must be {cols}'
-    assert rows == len(ver_texts), f'bad number of vertical texts: {len(ver_texts)}; must be {rows}'
+    assert cols == len(hor_texts), f'水平テキストの数が不正です: {len(hor_texts)}; {cols}でなければなりません'
+    assert rows == len(ver_texts), f'垂直テキストの数が不正です: {len(ver_texts)}; {rows}でなければなりません'
 
     calc_img = Image.new("RGB", (1, 1), color_background)
     calc_d = ImageDraw.Draw(calc_img)
@@ -276,7 +276,7 @@ def resize_image(resize_mode, im, width, height, upscaler_name=None):
             upscalers = [x for x in shared.sd_upscalers if x.name == upscaler_name]
             if len(upscalers) == 0:
                 upscaler = shared.sd_upscalers[0]
-                print(f"could not find upscaler named {upscaler_name or '<empty string>'}, using {upscaler.name} as a fallback")
+                print(f"名前が {upscaler_name or '<empty string>'} のアップスケーラーが見つかりませんでした。フォールバックとして {upscaler.name} を使用します。")
             else:
                 upscaler = upscalers[0]
 
@@ -658,7 +658,7 @@ def save_image(image, path, basename, seed=None, prompt=None, extension='png', i
 
     # WebP and JPG formats have maximum dimension limits of 16383 and 65535 respectively. switch to PNG which has a much higher limit
     if (image.height > 65535 or image.width > 65535) and extension.lower() in ("jpg", "jpeg") or (image.height > 16383 or image.width > 16383) and extension.lower() == "webp":
-        print('Image dimensions too large; saving as PNG')
+        print('画像の寸法が大きすぎます; PNGとして保存します。')
         extension = "png"
 
     if save_to_dirs is None:
@@ -753,7 +753,7 @@ def save_image(image, path, basename, seed=None, prompt=None, extension='png', i
         try:
             _atomically_save_image(image, fullfn_without_extension, ".jpg")
         except Exception as e:
-            errors.display(e, "saving image as downscaled JPG")
+            errors.display(e, "画像を縮小したJPGとして保存")
 
     if opts.save_txt and info is not None:
         txt_fullfn = f"{fullfn_without_extension}.txt"
@@ -809,10 +809,10 @@ def read_info_from_image(image: Image.Image) -> tuple[str | None, dict]:
             sampler = sd_samplers.samplers_map.get(json_info["sampler"], "Euler a")
 
             geninfo = f"""{items["Description"]}
-Negative prompt: {json_info["uc"]}
-Steps: {json_info["steps"]}, Sampler: {sampler}, CFG scale: {json_info["scale"]}, Seed: {json_info["seed"]}, Size: {image.width}x{image.height}, Clip skip: 2, ENSD: 31337"""
+ネガティブプロンプト: {json_info["uc"]}
+Steps: {json_info["steps"]}, サンプラー: {sampler}, CFGスケール: {json_info["scale"]}, シード: {json_info["seed"]}, サイズ: {image.width}x{image.height}, クリップスキップ: 2, ENSD: 31337"""
         except Exception:
-            errors.report("Error parsing NovelAI image generation parameters", exc_info=True)
+            errors.report("NovelAI の画像生成パラメータの解析エラー", exc_info=True)
 
     return geninfo, items
 
