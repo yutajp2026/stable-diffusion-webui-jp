@@ -32,9 +32,9 @@ def process_batch(p, input, output_dir, inpaint_mask_dir, args, to_scale=False, 
         is_inpaint_batch = bool(inpaint_masks)
 
         if is_inpaint_batch:
-            print(f"\nInpaint batch is enabled. {len(inpaint_masks)} masks found.")
+            print(f"\nインペイントバッチが有効です。{len(inpaint_masks)} 枚のマスクが見つかりました。")
 
-    print(f"Will process {len(batch_images)} images, creating {p.n_iter * p.batch_size} new images for each.")
+    print(f"{len(batch_images)} 枚の画像を処理し、各画像について {p.n_iter * p.batch_size} 枚の新しい画像を作成します。")
 
     state.job_count = len(batch_images) * p.n_iter
 
@@ -82,7 +82,7 @@ def process_batch(p, input, output_dir, inpaint_mask_dir, args, to_scale=False, 
                 masks_found = list(mask_image_dir.glob(f"{image_path.stem}.*"))
 
                 if len(masks_found) == 0:
-                    print(f"Warning: mask is not found for {image_path} in {mask_image_dir}. Skipping it.")
+                    print(f"警告: {mask_image_dir} にある {image_path} のマスクが見つかりません。スキップします。")
                     continue
 
                 # it should contain only 1 matching mask
@@ -182,12 +182,12 @@ def img2img(id_task: str, request: gr.Request, mode: int, prompt: str, negative_
     mask = images.fix_image(mask)
 
     if selected_scale_tab == 1 and not is_batch:
-        assert image, "Can't scale by because no image is selected"
+        assert image, "画像が選択されていないので拡大縮小できません"
 
         width = int(image.width * scale_by)
         height = int(image.height * scale_by)
 
-    assert 0. <= denoising_strength <= 1., 'can only work with strength in [0.0, 1.0]'
+    assert 0. <= denoising_strength <= 1., '拡散強度は [0.0, 1.0] の間でなければなりません'
 
     p = StableDiffusionProcessingImg2Img(
         sd_model=shared.sd_model,

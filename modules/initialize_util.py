@@ -29,7 +29,7 @@ def fix_pytorch_lightning():
     if 'pytorch_lightning.utilities.distributed' not in sys.modules:
         import pytorch_lightning
         # Lets the user know that the library was not found and then will set it to pytorch_lightning.utilities.rank_zero
-        print("Pytorch_lightning.distributed not found, attempting pytorch_lightning.rank_zero")
+        print("Pytorch_lightning.distributed が見つかりません、pytorch_lightning.rank_zero を試しています。")
         sys.modules["pytorch_lightning.utilities.distributed"] = pytorch_lightning.utilities.rank_zero
 
 def fix_asyncio_event_loop_policy():
@@ -83,13 +83,13 @@ def restore_config_state_file():
     shared.opts.save(shared.config_filename)
 
     if os.path.isfile(config_state_file):
-        print(f"*** About to restore extension state from file: {config_state_file}")
+        print(f"*** ファイルから拡張機能の状態を復元しようとしています: {config_state_file}")
         with open(config_state_file, "r", encoding="utf-8") as f:
             config_state = json.load(f)
             config_states.restore_extension_config(config_state)
         startup_timer.record("restore extension config")
     elif config_state_file:
-        print(f"!!! Config state backup not found: {config_state_file}")
+        print(f"!!! 設定状態のバックアップが見つかりません: {config_state_file}")
 
 
 def validate_tls_options():
@@ -100,14 +100,14 @@ def validate_tls_options():
 
     try:
         if not os.path.exists(cmd_opts.tls_keyfile):
-            print("Invalid path to TLS keyfile given")
+            print("TLS キーファイルのパスが無効です")
         if not os.path.exists(cmd_opts.tls_certfile):
-            print(f"Invalid path to TLS certfile: '{cmd_opts.tls_certfile}'")
+            print(f"TLS 証明書ファイルのパスが無効です: '{cmd_opts.tls_certfile}'")
     except TypeError:
         cmd_opts.tls_keyfile = cmd_opts.tls_certfile = None
-        print("TLS setup invalid, running webui without TLS")
+        print("TLS の設定が無効です、TLS なしで webui を実行しています")
     else:
-        print("Running with TLS")
+        print("TLSで実行しています")
     startup_timer.record("TLS")
 
 
@@ -161,7 +161,7 @@ def configure_sigint_handler():
     from modules import shared
 
     def sigint_handler(sig, frame):
-        print(f'Interrupted with signal {sig} in {frame}')
+        print(f'{frame}で信号{sig}により中断されました。')
 
         if shared.opts.dump_stacks_on_signal:
             dumpstacks()

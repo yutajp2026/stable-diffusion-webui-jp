@@ -32,6 +32,6 @@ def localization_js(current_localization_name: str) -> str:
                 with open(fn, "r", encoding="utf8") as file:
                     data.update(json.load(file))
             except Exception:
-                errors.report(f"Error loading localization from {fn}", exc_info=True)
+                errors.report(f"ローカリゼーションの読み込み中にエラーが発生しました: {fn}", exc_info=True)
 
     return f"window.localization = {json.dumps(data)}"

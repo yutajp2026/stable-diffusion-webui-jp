@@ -80,7 +80,7 @@ def image_from_url_text(filedata):
     if type(filedata) == dict and filedata.get("is_file", False):
         filename = filedata["name"]
         is_in_right_dir = ui_tempdir.check_tmp_file(shared.demo, filename)
-        assert is_in_right_dir, 'trying to open image file outside of allowed directories'
+        assert is_in_right_dir, '許可されたディレクトリの外で画像ファイルを開こうとしています。'
 
         filename = filename.rsplit('?', 1)[0]
         return images.read(filename)
@@ -119,7 +119,7 @@ def add_paste_fields(tabname, init_img, fields, override_settings_component=None
 def create_buttons(tabs_list):
     buttons = {}
     for tab in tabs_list:
-        buttons[tab] = gr.Button(f"Send to {tab}", elem_id=f"{tab}_tab")
+        buttons[tab] = gr.Button(f"{tab}に送る", elem_id=f"{tab}_tab")
     return buttons
 
 

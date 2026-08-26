@@ -36,7 +36,7 @@ def download_default_clip_interrogate_categories(content_dir):
         os.rename(tmpdir, content_dir)
 
     except Exception as e:
-        errors.display(e, "downloading default CLIP interrogate categories")
+        errors.display(e, "デフォルトのCLIP問い合わせカテゴリをダウンロード中")
     finally:
         if os.path.exists(tmpdir):
             os.removedirs(tmpdir)
@@ -213,7 +213,7 @@ class InterrogateModels:
                             res += f", {match}"
 
         except Exception:
-            errors.report("Error interrogating", exc_info=True)
+            errors.report("照会中にエラーが発生しました", exc_info=True)
             res += "<error>"
 
         self.unload()
