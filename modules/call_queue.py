@@ -76,10 +76,10 @@ def wrap_gradio_call_no_job(func, extra_outputs=None, add_stats=False):
             # When printing out our debug argument list,
             # do not print out more than a 100 KB of text
             max_debug_str_len = 131072
-            message = "Error completing request"
-            arg_str = f"Arguments: {args} {kwargs}"[:max_debug_str_len]
+            message = "リクエストの完了中にエラーが発生しました"
+            arg_str = f"引数: {args} {kwargs}"[:max_debug_str_len]
             if len(arg_str) > max_debug_str_len:
-                arg_str += f" (Argument list truncated at {max_debug_str_len}/{len(arg_str)} characters)"
+                arg_str += f" (引数リストは {max_debug_str_len}/{len(arg_str)} 文字で切り詰められました)"
             errors.report(f"{message}\n{arg_str}", exc_info=True)
 
             if extra_outputs_array is None:
@@ -108,9 +108,9 @@ def wrap_gradio_call_no_job(func, extra_outputs=None, add_stats=False):
             sys_total = mem_stats['total']
             sys_pct = sys_peak/max(sys_total, 1) * 100
 
-            toltip_a = "Active: peak amount of video memory used during generation (excluding cached data)"
-            toltip_r = "Reserved: total amount of video memory allocated by the Torch library "
-            toltip_sys = "System: peak amount of video memory allocated by all running programs, out of total capacity"
+            toltip_a = "アクティブ：生成中に使用されたビデオメモリの最大量（キャッシュデータを除く）"
+            toltip_r = "予約済み: Torchライブラリによって割り当てられたビデオメモリの総量 "
+            toltip_sys = "システム：実行中のすべてのプログラムによって割り当てられたビデオメモリのピーク量（総容量のうち）"
 
             text_a = f"<abbr title='{toltip_a}'>A</abbr>: <span class='measurement'>{active_peak/1024:.2f} GB</span>"
             text_r = f"<abbr title='{toltip_r}'>R</abbr>: <span class='measurement'>{reserved_peak/1024:.2f} GB</span>"
@@ -126,7 +126,7 @@ def wrap_gradio_call_no_job(func, extra_outputs=None, add_stats=False):
             profiling_html = ''
 
         # last item is always HTML
-        res[-1] += f"<div class='performance'><p class='time'>Time taken: <wbr><span class='measurement'>{elapsed_text}</span></p>{vram_html}{profiling_html}</div>"
+        res[-1] += f"<div class='performance'><p class='time'>かかった時間: <wbr><span class='measurement'>{elapsed_text}</span></p>{vram_html}{profiling_html}</div>"
 
         return tuple(res)
 
