@@ -13,31 +13,31 @@ def imports():
     logging.getLogger("xformers").addFilter(lambda record: 'A matching Triton is not available' not in record.getMessage())
 
     import torch  # noqa: F401
-    startup_timer.record("import torch")
+    startup_timer.record("torchのインポート")
     import pytorch_lightning  # noqa: F401
-    startup_timer.record("import torch")
+    startup_timer.record("pytorch_lightningのインポート")
     warnings.filterwarnings(action="ignore", category=DeprecationWarning, module="pytorch_lightning")
     warnings.filterwarnings(action="ignore", category=UserWarning, module="torchvision")
 
     os.environ.setdefault('GRADIO_ANALYTICS_ENABLED', 'False')
     import gradio  # noqa: F401
-    startup_timer.record("import gradio")
+    startup_timer.record("gradioのインポート")
 
     from modules import paths, timer, import_hook, errors  # noqa: F401
-    startup_timer.record("setup paths")
+    startup_timer.record("pathsの設定")
 
     import ldm.modules.encoders.modules  # noqa: F401
-    startup_timer.record("import ldm")
+    startup_timer.record("ldmのインポート")
 
     import sgm.modules.encoders.modules  # noqa: F401
-    startup_timer.record("import sgm")
+    startup_timer.record("sgmのインポート")
 
     from modules import shared_init
     shared_init.initialize()
-    startup_timer.record("initialize shared")
+    startup_timer.record("共有を初期化する")
 
     from modules import processing, gradio_extensons, ui  # noqa: F401
-    startup_timer.record("other imports")
+    startup_timer.record("その他の輸入")
 
 
 def check_versions():
@@ -107,7 +107,7 @@ def initialize_rest(*, reload_script_modules=False):
     localization.list_localizations(cmd_opts.localizations_dir)
     startup_timer.record("list localizations")
 
-    with startup_timer.subcategory("load scripts"):
+    with startup_timer.subcategory("スクリプトを読み込む"):
         scripts.load_scripts()
 
     if reload_script_modules and shared.opts.enable_reloading_ui_scripts:
@@ -166,4 +166,4 @@ def initialize_rest(*, reload_script_modules=False):
     from modules import extra_networks
     extra_networks.initialize()
     extra_networks.register_default_extra_networks()
-    startup_timer.record("initialize extra networks")
+    startup_timer.record("追加ネットワークを初期化する")

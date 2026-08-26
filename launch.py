@@ -34,7 +34,7 @@ def main():
 
     launch_utils.startup_timer.record("initial startup")
 
-    with launch_utils.startup_timer.subcategory("prepare environment"):
+    with launch_utils.startup_timer.subcategory("環境を準備する"):
         if not args.skip_prepare_environment:
             prepare_environment()
 
