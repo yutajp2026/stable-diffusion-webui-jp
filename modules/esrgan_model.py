@@ -30,7 +30,7 @@ class UpscalerESRGAN(Upscaler):
         try:
             model = self.load_model(selected_model)
         except Exception:
-            errors.report(f"Unable to load ESRGAN model {selected_model}", exc_info=True)
+            errors.report(f"ESRGANモデルを読み込めません {selected_model}", exc_info=True)
             return img
         model.to(devices.device_esrgan)
         return esrgan_upscale(model, img)

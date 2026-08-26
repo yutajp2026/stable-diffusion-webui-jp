@@ -26,7 +26,7 @@ class UpscalerDAT(Upscaler):
         try:
             info = self.load_model(path)
         except Exception:
-            errors.report(f"Unable to load DAT model {path}", exc_info=True)
+            errors.report(f"DATモデルを読み込めません {path}", exc_info=True)
             return img
 
         model_descriptor = modelloader.load_spandrel_model(
@@ -51,9 +51,9 @@ class UpscalerDAT(Upscaler):
                         model_dir=self.model_download_path,
                     )
                 if not os.path.exists(scaler.local_data_path):
-                    raise FileNotFoundError(f"DAT data missing: {scaler.local_data_path}")
+                    raise FileNotFoundError(f"DATデータが見つかりません: {scaler.local_data_path}")
                 return scaler
-        raise ValueError(f"Unable to find model info: {path}")
+        raise ValueError(f"モデル情報を見つけられません: {path}")
 
 
 def get_dat_models(scaler):

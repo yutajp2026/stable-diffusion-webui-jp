@@ -64,7 +64,7 @@ def print_error_explanation(message):
 def display(e: Exception, task, *, full_traceback=False):
     record_exception()
 
-    print(f"{task or 'error'}: {type(e).__name__}", file=sys.stderr)
+    print(f"{task or 'エラー'}: {type(e).__name__}", file=sys.stderr)
     te = traceback.TracebackException.from_exception(e)
     if full_traceback:
         # include frames leading up to the try-catch block
@@ -74,8 +74,8 @@ def display(e: Exception, task, *, full_traceback=False):
     message = str(e)
     if "copying a param with shape torch.Size([640, 1024]) from checkpoint, the shape in current model is torch.Size([640, 768])" in message:
         print_error_explanation("""
-The most likely cause of this is you are trying to load Stable Diffusion 2.0 model without specifying its config file.
-See https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#stable-diffusion-20 for how to solve this.
+この問題の最も考えられる原因は、設定ファイルを指定せずにStable Diffusion 2.0モデルをロードしようとしていることです。
+解決方法については、https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#stable-diffusion-20 を参照してください。
         """)
 
 
@@ -113,13 +113,12 @@ def check_versions():
 
     if version.parse(torch.__version__) < version.parse(expected_torch_version):
         print_error_explanation(f"""
-You are running torch {torch.__version__}.
-The program is tested to work with torch {expected_torch_version}.
-To reinstall the desired version, run with commandline flag --reinstall-torch.
-Beware that this will cause a lot of large files to be downloaded, as well as
-there are reports of issues with training tab on the latest version.
-
-Use --skip-version-check commandline argument to disable this check.
+あなたは torch {torch.__version__} を実行しています。
+このプログラムは torch {expected_torch_version} で動作することがテストされています。
+希望するバージョンを再インストールするには、コマンドラインフラグ --reinstall-torch を使用してください。
+これにより、多くの大きなファイルがダウンロードされる可能性があり、
+最新バージョンでのトレーニングタブに関する問題の報告もあります。
+このチェックを無効にするには、コマンドライン引数 --skip-version-check を使用してください。
         """.strip())
 
     if shared.xformers_available:
@@ -127,24 +126,24 @@ Use --skip-version-check commandline argument to disable this check.
 
         if version.parse(xformers.__version__) < version.parse(expected_xformers_version):
             print_error_explanation(f"""
-You are running xformers {xformers.__version__}.
-The program is tested to work with xformers {expected_xformers_version}.
-To reinstall the desired version, run with commandline flag --reinstall-xformers.
+あなたは xformers {xformers.__version__} を実行しています。
+このプログラムは xformers {expected_xformers_version} で動作することがテストされています。
+希望するバージョンを再インストールするには、コマンドラインフラグ --reinstall-xformers を使用してください。
 
-Use --skip-version-check commandline argument to disable this check.
+このチェックを無効にするには、--skip-version-check コマンドライン引数を使用してください。
             """.strip())
 
     if gradio.__version__ != expected_gradio_version:
         print_error_explanation(f"""
-You are running gradio {gradio.__version__}.
-The program is designed to work with gradio {expected_gradio_version}.
-Using a different version of gradio is extremely likely to break the program.
+あなたは gradio {gradio.__version__} を実行しています。
+このプログラムは gradio {expected_gradio_version} で動作することがテストされています。
+希望するバージョンを再インストールするには、コマンドラインフラグ --reinstall-gradio を使用してください。
 
-Reasons why you have the mismatched gradio version can be:
-  - you use --skip-install flag.
-  - you use webui.py to start the program instead of launch.py.
-  - an extension installs the incompatible gradio version.
+Gradioのバージョンが一致しない理由は次の通りです：
+- --skip-install フラグを使用している。
+- launch.pyではなくwebui.pyでプログラムを起動している。
+- 拡張機能が互換性のないGradioのバージョンをインストールする。
 
-Use --skip-version-check commandline argument to disable this check.
+このチェックを無効にするには、--skip-version-check コマンドライン引数を使用してください。
         """.strip())
 

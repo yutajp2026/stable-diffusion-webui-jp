@@ -49,7 +49,7 @@ class ExtensionMetadata:
         try:
             self.config.read(filepath)
         except Exception:
-            errors.report(f"Error reading {self.filename} for extension {canonical_name}.", exc_info=True)
+            errors.report(f"拡張機能 {canonical_name} の {self.filename} を読み込めません。", exc_info=True)
 
         self.canonical_name = self.config.get("Extension", "Name", fallback=canonical_name)
         self.canonical_name = canonical_name.lower().strip()
@@ -93,7 +93,7 @@ class ExtensionMetadata:
             callback_name = section[10:]
 
             if not callback_name.startswith(self.canonical_name):
-                errors.report(f"Callback order section for extension {self.canonical_name} is referencing the wrong extension: {section}")
+                errors.report(f"拡張機能 {self.canonical_name} のコールバック順序セクションが、誤った拡張機能を参照しています: {section}")
                 continue
 
             before = self.parse_list(self.config.get(section, 'Before', fallback=''))
@@ -156,7 +156,7 @@ class Extension:
             if os.path.exists(os.path.join(self.path, ".git")):
                 repo = Repo(self.path)
         except Exception:
-            errors.report(f"Error reading github repository info from {self.path}", exc_info=True)
+            errors.report(f"{self.path} から GitHub リポジトリ情報の読み取り中にエラーが発生しました", exc_info=True)
 
         if repo is None or repo.bare:
             self.remote = None
@@ -171,7 +171,7 @@ class Extension:
                 self.version = self.commit_hash[:8]
 
             except Exception:
-                errors.report(f"Failed reading extension data from Git repository ({self.name})", exc_info=True)
+                errors.report(f"{self.name} の Git リポジトリから拡張機能データの読み取りに失敗しました", exc_info=True)
                 self.remote = None
 
         self.have_info_from_repo = True
@@ -197,18 +197,18 @@ class Extension:
                 continue
             if fetch.flags != fetch.HEAD_UPTODATE:
                 self.can_update = True
-                self.status = "new commits"
+                self.status = "新しいコミット"
                 return
 
         try:
             origin = repo.rev_parse(branch_name)
             if repo.head.commit != origin:
                 self.can_update = True
-                self.status = "behind HEAD"
+                self.status = "HEADの後ろ"
                 return
         except Exception:
             self.can_update = False
-            self.status = "unknown (remote error)"
+            self.status = "不明（リモートエラー）"
             return
 
         self.can_update = False
@@ -231,13 +231,13 @@ def list_extensions():
     loaded_extensions.clear()
 
     if shared.cmd_opts.disable_all_extensions:
-        print("*** \"--disable-all-extensions\" arg was used, will not load any extensions ***")
+        print("*** \"--disable-all-extensions\" arg が使用されました、拡張機能は読み込まれません ***")
     elif shared.opts.disable_all_extensions == "all":
-        print("*** \"Disable all extensions\" option was set, will not load any extensions ***")
+        print("*** \"すべての拡張機能を無効にする\" オプションが設定されているため、拡張機能は読み込まれません ***")
     elif shared.cmd_opts.disable_extra_extensions:
-        print("*** \"--disable-extra-extensions\" arg was used, will only load built-in extensions ***")
+        print("*** \"--disable-extra-extensions\" arg が使用されました、組み込み拡張機能のみが読み込まれます ***")
     elif shared.opts.disable_all_extensions == "extra":
-        print("*** \"Disable all extensions\" option was set, will only load built-in extensions ***")
+        print("*** \"すべての拡張機能を無効にする\" オプションが設定されているため、組み込み拡張機能のみが読み込まれます ***")
 
 
     # scan through extensions directory and load metadata
@@ -256,7 +256,7 @@ def list_extensions():
             # check for duplicated canonical names
             already_loaded_extension = loaded_extensions.get(metadata.canonical_name)
             if already_loaded_extension is not None:
-                errors.report(f'Duplicate canonical name "{canonical_name}" found in extensions "{extension_dirname}" and "{already_loaded_extension.name}". Former will be discarded.', exc_info=False)
+                errors.report(f'拡張機能「{extension_dirname}」と「{already_loaded_extension.name}」で重複する正規名「{canonical_name}」が見つかりました。前者は破棄されます。', exc_info=False)
                 continue
 
             is_builtin = dirname == extensions_builtin_dir
@@ -276,11 +276,11 @@ def list_extensions():
         for req in extension.metadata.requires:
             required_extension = loaded_extensions.get(req)
             if required_extension is None:
-                errors.report(f'Extension "{extension.name}" requires "{req}" which is not installed.', exc_info=False)
+                errors.report(f'拡張機能 "{extension.name}" はインストールされていない "{req}" を必要とします。', exc_info=False)
                 continue
 
             if not required_extension.enabled:
-                errors.report(f'Extension "{extension.name}" requires "{required_extension.name}" which is disabled.', exc_info=False)
+                errors.report(f'拡張機能 "{extension.name}" は無効化された "{required_extension.name}" を必要とします。', exc_info=False)
                 continue
 
 
