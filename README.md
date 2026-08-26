@@ -3,6 +3,8 @@
 
 Gradio ライブラリで実装された Stable Diffusion 用の Web インターフェースを日本語訳したものです。
 
+[Download Now](https://github.com/yutajp2026/stable-diffusion-webui-jp#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A8%E5%AE%9F%E8%A1%8C)
+
 ![](screenshot.png)
 
 ## 機能
@@ -54,13 +56,13 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - テクスチャのようにタイル化できる画像を作成する Tiling 対応
 - プログレスバーと画像生成のライブプレビュー
     - VRAM や計算資源をほとんど必要としない別のニューラルネットワークでプレビューを生成可能
-- Negative prompt: 生成画像に表示したくないものを入力する追加テキスト欄
+- ネガティブプロンプト: 生成画像に表示したくないものを入力する追加テキスト欄
 - Styles: プロンプトの一部を保存し、後からドロップダウンで簡単に適用
 - Variations: わずかに異なる同じ画像を生成
-- Seed resizing: 少し異なる解像度で同じ画像を生成
+- シードリサイジング: 少し異なる解像度で同じ画像を生成
 - CLIP interrogator: 画像からプロンプトを推測するボタン
-- Prompt Editing: 生成途中でプロンプトを変更（例: スイカからアニメの女の子へ切り替え）
-- Batch Processing: img2img を使って複数ファイルを処理
+- プロンプト編集: 生成途中でプロンプトを変更（例: スイカからアニメの女の子へ切り替え）
+- バッチ処理: img2img を使って複数ファイルを処理
 - Img2img Alternative: cross attention control のための逆 Euler 法
 - Highres Fix: 通常発生する歪みを抑え、高解像度画像をワンクリックで生成
 - checkpoint を実行中に再読み込み
@@ -77,7 +79,7 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - Training タブ
     - hypernetwork と埋め込みのオプション
     - 画像の前処理: BLIP または deepdanbooru（アニメ向け）によるトリミング、反転、自動タグ付け
-- Clip skip
+- Clipスキップ
 - Hypernetwork
 - Lora（Hypernetwork と同様ですが、より扱いやすい機能）
 - 埋め込み、hypernetwork、Lora をプレビュー付きで選択してプロンプトに追加できる専用 UI
@@ -108,7 +110,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 - Pythonはwebui.batにて自動でインストールされるようにしました(Windowsアプリ版以外はPythonが実行できない場合に限る)。
 - Pythonのバージョンが競合する場合は環境変数Pathから使わないPythonのパスを削除するとよいです。
 
-**リリースアプリ版(Windows推奨)**:
+**リリースアプリパッケージ版(Windows推奨)**:
 
 2026年内公開予定
 
