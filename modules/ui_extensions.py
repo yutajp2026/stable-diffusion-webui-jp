@@ -567,9 +567,9 @@ def create_ui():
                     if shared.cmd_opts.disable_all_extensions:
                         msg = '`--disable-all-extensions` が使用されました。すべての拡張機能を再び読み込むには、これを削除してください。'
                     elif shared.opts.disable_all_extensions != "none":
-                        msg = '"すべての拡張機能を無効にする"が設定されていましたが、すべての拡張機能を再度読み込むには"なし"に変更してください。'
+                        msg = '"すべての拡張機能を無効にする"が設定されていましたが、すべての拡張機能を再度読み込むには"none"に変更してください。'
                     elif shared.cmd_opts.disable_extra_extensions:
-                        msg = '`--disable-extra-extensions` が使用されました。すべての拡張機能を再び読み込むには、これを削除してください。'
+                        msg = '`--disable-extra-extensions` が使用されまchangedした。すべての拡張機能を再び読み込むには、これを削除してください。'
                     html = f'<span style="color: var(--primary-400);">{msg}</span>'
 
                 with gr.Row():
