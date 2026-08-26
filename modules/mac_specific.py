@@ -33,12 +33,12 @@ has_mps = check_for_mps()
 def torch_mps_gc() -> None:
     try:
         if shared.state.current_latent is not None:
-            log.debug("`current_latent` is set, skipping MPS garbage collection")
+            log.debug("``current_latent` が設定されているため、MPS ガベージコレクションをスキップします。")
             return
         from torch.mps import empty_cache
         empty_cache()
     except Exception:
-        log.warning("MPS garbage collection failed", exc_info=True)
+        log.warning("MPS ガベージコレクションに失敗しました", exc_info=True)
 
 
 # MPS workaround for https://github.com/pytorch/pytorch/issues/89784
@@ -61,7 +61,7 @@ def interpolate_with_fp32_fallback(orig_func, *args, **kwargs) -> Tensor:
             input_tensor = args[0]
             return orig_func(input_tensor.to(torch.float32), *args[1:], **kwargs).to(input_tensor.dtype)
         else:
-            print(f"An unexpected RuntimeError occurred: {str(e)}")
+            print(f"予期しない RuntimeError が発生しました: {str(e)}")
 
 if has_mps:
     if platform.mac_ver()[0].startswith("13.2."):
