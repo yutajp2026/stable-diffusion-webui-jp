@@ -178,17 +178,16 @@ Google などの検索エンジンが wiki をクロールできるように、�
 - LDSR - https://github.com/Hafiidz/latent-diffusion
 - MiDaS - https://github.com/isl-org/MiDaS
 - 最適化のアイデア - https://github.com/basujindal/stable-diffusion
-- Cross Attention レイヤーの最適化 - Doggettx - https://github.com/Doggettx/stable-diffusion 、prompt editing の原案
-- Cross Attention レイヤーの最適化 - InvokeAI、lstein - https://github.com/invoke-ai/InvokeAI（元は http://github.com/lstein/stable-diffusion）
-- Sub-quadratic Cross Attention レイヤーの最適化 - Alex Birch（https://github.com/Birch-san/diffusers/pull/1）、Amin Rezaei（https://github.com/AminRezaei0x443/memory-efficient-attention）
-- Textual Inversion - Rinon Gal - https://github.com/rinongal/textual_inversion（コードは使用していませんが、アイデアを採用しています）
+- Cross Attention レイヤーの最適化 - Doggettx - https://github.com/Doggettx/stable-diffusion, prompt editing の原案
+- Cross Attention レイヤーの最適化 - InvokeAI、lstein - https://github.com/invoke-ai/InvokeAI (元は http://github.com/lstein/stable-diffusion)
+- Textual Inversion - Rinon Gal - https://github.com/rinongal/textual_inversion （コードは使用していませんが、アイデアを採用しています）
 - SD upscale のアイデア - https://github.com/jquesnelle/txt2imghd
 - outpainting mk2 のノイズ生成 - https://github.com/parlance-zz/g-diffuser-bot
 - CLIP interrogator のアイデアとコードの一部 - https://github.com/pharmapsychotic/clip-interrogator
 - Composable Diffusion のアイデア - https://github.com/energy-based-model/Compositional-Visual-Generation-with-Composable-Diffusion-Models-PyTorch
 - xformers - https://github.com/facebookresearch/xformers
 - DeepDanbooru - アニメ用 interrogator https://github.com/KichangKim/DeepDanbooru
-- float16 UNet から float32 精度でサンプリング - アイデアは marunine、Diffusers 実装例は Birch-san（https://github.com/Birch-san/diffusers-play/tree/92feee6）
+- float16 UNet から float32 精度でサンプリング - アイデアは marunine、Diffusers 実装例は Birch-san(https://github.com/Birch-san/diffusers-play/tree/92feee6)
 - Instruct pix2pix - Tim Brooks (star)、Aleksander Holynski (star)、Alexei A. Efros (no star) - https://github.com/timothybrooks/instruct-pix2pix
 - セキュリティに関する助言 - RyotaK
 - UniPC sampler - Wenliang Zhao - https://github.com/wl-zhao/UniPC
