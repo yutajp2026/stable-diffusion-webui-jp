@@ -39,7 +39,7 @@ class FaceRestorerCodeFormer(face_restoration_utils.CommonFaceRestoration):
                 device=devices.device_codeformer,
                 expected_architecture='CodeFormer',
             ).model
-        raise ValueError("No codeformer model found")
+        raise ValueError("codeformerモデルが見つかりません")
 
     def get_device(self):
         return devices.device_codeformer
@@ -61,4 +61,4 @@ def setup_model(dirname: str) -> None:
         codeformer = FaceRestorerCodeFormer(dirname)
         shared.face_restorers.append(codeformer)
     except Exception:
-        errors.report("Error setting up CodeFormer", exc_info=True)
+        errors.report("CodeFormerのセットアップ中にエラーが発生しました", exc_info=True)

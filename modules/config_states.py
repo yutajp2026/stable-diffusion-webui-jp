@@ -28,11 +28,11 @@ def list_config_states():
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     j = json.load(f)
-                    assert "created_at" in j, '"created_at" does not exist'
+                    assert "created_at" in j, '"created_at" が存在しません'
                     j["filepath"] = path
                     config_states.append(j)
             except Exception as e:
-                print(f'[ERROR]: Config states {path}, {e}')
+                print(f'[エラー]: 設定に記載されています {path}, {e}')
 
     config_states = sorted(config_states, key=lambda cs: cs["created_at"], reverse=True)
 
@@ -113,16 +113,16 @@ def get_config():
 
 
 def restore_webui_config(config):
-    print("* Restoring webui state...")
+    print("* WebUIの状態を復元しています...")
 
     if "webui" not in config:
-        print("Error: No webui data saved to config")
+        print("エラー: WebUIデータが設定に保存されていません")
         return
 
     webui_config = config["webui"]
 
     if "commit_hash" not in webui_config:
-        print("Error: No commit saved to webui config")
+        print("エラー: WebUI設定にコミットが保存されていません")
         return
 
     webui_commit_hash = webui_config.get("commit_hash", None)
@@ -132,22 +132,22 @@ def restore_webui_config(config):
         if os.path.exists(os.path.join(script_path, ".git")):
             webui_repo = git.Repo(script_path)
     except Exception:
-        errors.report(f"Error reading webui git info from {script_path}", exc_info=True)
+        errors.report(f"エラー: {script_path} から WebUI の git 情報を読み取る際にエラーが発生しました", exc_info=True)
         return
 
     try:
         webui_repo.git.fetch(all=True)
         webui_repo.git.reset(webui_commit_hash, hard=True)
-        print(f"* Restored webui to commit {webui_commit_hash}.")
+        print(f"* WebUIをコミット {webui_commit_hash} に復元しました。")
     except Exception:
-        errors.report(f"Error restoring webui to commit{webui_commit_hash}")
+        errors.report(f"エラー: WebUIをコミット {webui_commit_hash} に復元する際にエラーが発生しました", exc_info=True)
 
 
 def restore_extension_config(config):
-    print("* Restoring extension state...")
+    print("* 拡張機能の状態を復元しています...")
 
     if "extensions" not in config:
-        print("Error: No extension data saved to config")
+        print("エラー: 設定に拡張機能データが保存されていません")
         return
 
     ext_config = config["extensions"]
@@ -165,7 +165,7 @@ def restore_extension_config(config):
         if ext.name not in ext_config:
             ext.disabled = True
             disabled.append(ext.name)
-            results.append((ext, current_commit[:8], False, "Saved extension state not found in config, marking as disabled"))
+            results.append((ext, current_commit[:8], False, "保存された拡張機能の状態が設定に見つかりません。無効化としてマークします。"))
             continue
 
         entry = ext_config[ext.name]
@@ -179,7 +179,7 @@ def restore_extension_config(config):
             except Exception as ex:
                 results.append((ext, current_commit[:8], False, ex))
         else:
-            results.append((ext, current_commit[:8], False, "No commit hash found in config"))
+            results.append((ext, current_commit[:8], False, "設定にコミットハッシュが見つかりません。"))
 
         if not entry.get("enabled", False):
             ext.disabled = True
