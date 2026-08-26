@@ -92,4 +92,4 @@ type tmp\stderr.txt
 :endofscript
 
 echo.
-echo msgbox "終了します。詳細は黒い画面に表示されています。" > %TEMP%/msgboxtest.vbs & %TEMP%/msgboxtest.vbs
+echo msgbox "起動できませんでした。終了します。" > %TEMP%/msgboxtest.vbs & %TEMP%/msgboxtest.vbs
