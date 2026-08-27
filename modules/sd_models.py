@@ -160,7 +160,7 @@ def list_models():
         expected_sha256 = None
     else:
         model_url = f"{shared.hf_endpoint}/webui/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.safetensors"
-        expected_sha256 = '6ce0161689b3853acaa03779ec93eafe75a02f4ced659bee03f50797806fa2fa'
+        expected_sha256 = 'dcd690123cfc64383981a31d955694f6acf2072a80537fdb612c8e58ec87a8ac'
 
     model_list = modelloader.load_models(model_path=model_path, model_url=model_url, command_path=shared.cmd_opts.ckpt_dir, ext_filter=[".ckpt", ".safetensors"], download_name="v2-1_768-ema-pruned.safetensors", ext_blacklist=[".vae.ckpt", ".vae.safetensors"], hash_prefix=expected_sha256)
 

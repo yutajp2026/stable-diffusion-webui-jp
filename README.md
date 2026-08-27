@@ -86,9 +86,8 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - 設定画面から別の VAE を読み込み可能
 - プログレスバーに完了予定時間を表示
 - API
-- RunwayML の専用 ~~[inpainting model](https://github.com/runwayml/stable-diffusion#inpainting-with-stable-diffusion)~~ (開けません) に対応
 - 拡張機能: [Aesthetic Gradients](https://github.com/AUTOMATIC1111/stable-diffusion-webui-aesthetic-gradients) で、CLIP 画像 embedding を使い特定の美的傾向を持つ画像を生成（実装は [こちら](https://github.com/vicgalle/stable-diffusion-aesthetic-gradients)）
-- ~~[Stable Diffusion 2.0](https://github.com/Stability-AI/stablediffusion)~~ (開けません) に対応（手順は [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#stable-diffusion-20) を参照）
+- モデルは標準で [Stable Diffusion 2.1](https://huggingface.co/webui/stable-diffusion-2-1/tree/main)
 - [Alt-Diffusion](https://arxiv.org/abs/2211.06679) に対応（手順は [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#alt-diffusion) を参照）
 - 不適切な文字を含まない生成
 - safetensors 形式のチェックポイントを読み込み
