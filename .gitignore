@@ -3,6 +3,7 @@ __pycache__
 *.safetensors
 *.pth
 *.exe
+t.py
 .DS_Store
 /ESRGAN/*
 /SwinIR/*
