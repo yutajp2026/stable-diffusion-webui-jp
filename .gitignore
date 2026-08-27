@@ -1,6 +1,5 @@
 __pycache__
 *.ckpt
-*.safetensors
 *.pth
 *.exe
 t.py
