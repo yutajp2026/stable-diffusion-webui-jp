@@ -53,24 +53,24 @@ def add_task_to_queue(id_job):
     pending_tasks[id_job] = time.time()
 
 class PendingTasksResponse(BaseModel):
-    size: int = Field(title="Pending task size")
-    tasks: List[str] = Field(title="Pending task ids")
+    size: int = Field(title="保留中のタスクのサイズ")
+    tasks: List[str] = Field(title="保留中のタスクID")
 
 class ProgressRequest(BaseModel):
-    id_task: str = Field(default=None, title="Task ID", description="id of the task to get progress for")
-    id_live_preview: int = Field(default=-1, title="Live preview image ID", description="id of last received last preview image")
-    live_preview: bool = Field(default=True, title="Include live preview", description="boolean flag indicating whether to include the live preview image")
+    id_task: str = Field(default=None, title="タスクID", description="進行状況を取得するタスクのID")
+    id_live_preview: int = Field(default=-1, title="ライブプレビューイメージID", description="最後に受信したプレビューイメージのID")
+    live_preview: bool = Field(default=True, title="ライブプレビューを含める", description="ライブプレビューイメージを含めるかどうかを示すブールフラグ")
 
 
 class ProgressResponse(BaseModel):
-    active: bool = Field(title="Whether the task is being worked on right now")
-    queued: bool = Field(title="Whether the task is in queue")
-    completed: bool = Field(title="Whether the task has already finished")
-    progress: float = Field(default=None, title="Progress", description="The progress with a range of 0 to 1")
-    eta: float = Field(default=None, title="ETA in secs")
-    live_preview: str = Field(default=None, title="Live preview image", description="Current live preview; a data: uri")
-    id_live_preview: int = Field(default=None, title="Live preview image ID", description="Send this together with next request to prevent receiving same image")
-    textinfo: str = Field(default=None, title="Info text", description="Info text used by WebUI.")
+    active: bool = Field(title="保留中のタスクかどうか")
+    queued: bool = Field(title="タスクがキュー内にあるかどうか")
+    completed: bool = Field(title="タスクが完了したかどうか")
+    progress: float = Field(default=None, title="進行状況", description="0から1までの範囲の進行状況")
+    eta: float = Field(default=None, title="残り時間（秒）")
+    live_preview: str = Field(default=None, title="ライブプレビューイメージ", description="現在のライブプレビュー: data: uri")
+    id_live_preview: int = Field(default=None, title="ライブプレビューイメージID", description="次のリクエストと一緒に送信して、同じイメージを受信しないようにする")
+    textinfo: str = Field(default=None, title="情報テキスト", description="WebUIで使用される情報テキスト。")
 
 
 def setup_progress_api(app):
@@ -90,11 +90,11 @@ def progressapi(req: ProgressRequest):
     completed = req.id_task in finished_tasks
 
     if not active:
-        textinfo = "Waiting..."
+        textinfo = "待機中..."
         if queued:
             sorted_queued = sorted(pending_tasks.keys(), key=lambda x: pending_tasks[x])
             queue_index = sorted_queued.index(req.id_task)
-            textinfo = "In queue: {}/{}".format(queue_index + 1, len(sorted_queued))
+            textinfo = "キュー内: {}/{}".format(queue_index + 1, len(sorted_queued))
         return ProgressResponse(active=active, queued=queued, completed=completed, id_live_preview=-1, textinfo=textinfo)
 
     progress = 0

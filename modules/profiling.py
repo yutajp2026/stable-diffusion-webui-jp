@@ -34,7 +34,7 @@ class Profiler:
 
     def __exit__(self, exc_type, exc, exc_tb):
         if self.profiler:
-            shared.state.textinfo = "Finishing profile..."
+            shared.state.textinfo = "プロファイルを終了しています..."
 
             self.profiler.__exit__(exc_type, exc, exc_tb)
 
