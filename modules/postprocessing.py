@@ -31,7 +31,7 @@ def run_postprocessing(extras_mode, image, image_folder, input_dir, output_dir, 
             for filename in image_list:
                 yield filename, filename
         else:
-            assert image, 'image not selected'
+            assert image, '画像が選択されていません'
             yield image, None
 
     if extras_mode == 2 and output_dir != '':

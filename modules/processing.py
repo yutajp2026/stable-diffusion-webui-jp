@@ -227,7 +227,7 @@ class StableDiffusionProcessing:
 
     def __post_init__(self):
         if self.sampler_index is not None:
-            print("sampler_index argument for StableDiffusionProcessing does not do anything; use sampler_name", file=sys.stderr)
+            print("StableDiffusionProcessing の sampler_index 引数は何も行いません; sampler_name を使用してください", file=sys.stderr)
 
         self.comments = {}
 
@@ -429,7 +429,7 @@ class StableDiffusionProcessing:
             self.all_negative_prompts = [self.negative_prompt] * len(self.all_prompts)
 
         if len(self.all_prompts) != len(self.all_negative_prompts):
-            raise RuntimeError(f"Received a different number of prompts ({len(self.all_prompts)}) and negative prompts ({len(self.all_negative_prompts)})")
+            raise RuntimeError(f"異なる数のプロンプトを受け取りました ({len(self.all_prompts)}) そしてネガティブプロンプト ({len(self.all_negative_prompts)})")
 
         self.all_prompts = [shared.prompt_styles.apply_styles_to_prompt(x, self.styles) for x in self.all_prompts]
         self.all_negative_prompts = [shared.prompt_styles.apply_negative_styles_to_prompt(x, self.styles) for x in self.all_negative_prompts]
@@ -639,13 +639,13 @@ def decode_latent_batch(model, batch, target_device=None, check_for_nans=False):
                 if shared.opts.auto_vae_precision_bfloat16:
                     autofix_dtype = torch.bfloat16
                     autofix_dtype_text = "bfloat16"
-                    autofix_dtype_setting = "Automatically convert VAE to bfloat16"
+                    autofix_dtype_setting = "自動的にVAEをbfloat16に変換"
                     autofix_dtype_comment = ""
                 elif shared.opts.auto_vae_precision:
                     autofix_dtype = torch.float32
                     autofix_dtype_text = "32-bit float"
-                    autofix_dtype_setting = "Automatically revert VAE to 32-bit floats"
-                    autofix_dtype_comment = "\nTo always start with 32-bit VAE, use --no-half-vae commandline flag."
+                    autofix_dtype_setting = "自動的にVAEを32-bit floatに復元"
+                    autofix_dtype_comment = "\n32-bit VAEで常に開始するには、--no-half-vae コマンドラインフラグを使用してください。"
                 else:
                     raise e
 
@@ -653,9 +653,9 @@ def decode_latent_batch(model, batch, target_device=None, check_for_nans=False):
                     raise e
 
                 errors.print_error_explanation(
-                    "A tensor with all NaNs was produced in VAE.\n"
-                    f"Web UI will now convert VAE into {autofix_dtype_text} and retry.\n"
-                    f"To disable this behavior, disable the '{autofix_dtype_setting}' setting.{autofix_dtype_comment}"
+                    "VAEですべてNaNのテンソルが生成されました。\n"
+                    f"Web UIはVAEを{autofix_dtype_text}に変換して再試行します。\n"
+                    f"この動作を無効にするには、'{autofix_dtype_setting}' 設定を無効にしてください。{autofix_dtype_comment}"
                 )
 
                 devices.dtype_vae = autofix_dtype
@@ -806,7 +806,7 @@ def create_infotext(p, all_prompts, all_seeds, all_subseeds, comments=None, iter
             elif callable(value):
                 generation_params[key] = value(**locals())
         except Exception:
-            errors.report(f'Error creating infotext for key "{key}"', exc_info=True)
+            errors.report(f'キー「{key}」の情報テキストの作成中にエラーが発生しました', exc_info=True)
             generation_params[key] = None
 
     generation_params_text = ", ".join([k if k == v else f'{k}: {infotext_utils.quote(v)}' for k, v in generation_params.items() if v is not None])
@@ -882,7 +882,7 @@ def process_images_inner(p: StableDiffusionProcessing) -> Processed:
     if p.refiner_checkpoint not in (None, "", "None", "none"):
         p.refiner_checkpoint_info = sd_models.get_closet_checkpoint_match(p.refiner_checkpoint)
         if p.refiner_checkpoint_info is None:
-            raise Exception(f'Could not find checkpoint with name {p.refiner_checkpoint}')
+            raise Exception(f'{p.refiner_checkpoint} という名前のチェックポイントが見つかりませんでした。')
 
     if hasattr(shared.sd_model, 'fix_dimensions'):
         p.width, p.height = shared.sd_model.fix_dimensions(p.width, p.height)
@@ -1283,7 +1283,7 @@ class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
             self.latent_scale_mode = shared.latent_upscale_modes.get(self.hr_upscaler, None) if self.hr_upscaler is not None else shared.latent_upscale_modes.get(shared.latent_upscale_default_mode, "nearest")
             if self.enable_hr and self.latent_scale_mode is None:
                 if not any(x.name == self.hr_upscaler for x in shared.sd_upscalers):
-                    raise Exception(f"could not find upscaler named {self.hr_upscaler}")
+                    raise Exception(f"「{self.hr_upscaler}」という名前のアップスケーラーが見つかりませんでした")
 
             self.calculate_target_resolution()
 
@@ -1650,7 +1650,7 @@ class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
                     image_mask = None
                     self.mask_for_overlay = None
                     self.inpaint_full_res = False
-                    massage = 'Unable to perform "Inpaint Only mask" because mask is blank, switch to img2img mode.'
+                    massage = 'マスクが空白のため「マスクのみにインペイント」を実行できません。img2imgモードに切り替えてください。'
                     model_hijack.comments.append(massage)
                     logging.info(massage)
             else:
@@ -1719,7 +1719,7 @@ class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
             self.batch_size = len(imgs)
             batch_images = np.array(imgs)
         else:
-            raise RuntimeError(f"bad number of images passed: {len(imgs)}; expecting {self.batch_size} or less")
+            raise RuntimeError(f"渡された画像の数が不正です: {len(imgs)}; {self.batch_size} 以下を期待しています")
 
         image = torch.from_numpy(batch_images)
         image = image.to(shared.device, dtype=devices.dtype_vae)
