@@ -31,7 +31,7 @@ for possible_sd_path in possible_sd_paths:
         sd_path = os.path.abspath(possible_sd_path)
         break
 
-assert sd_path is not None, f"Couldn't find Stable Diffusion in any of: {possible_sd_paths}"
+assert sd_path is not None, f"どこにもStable Diffusionが見つかりませんでした: {possible_sd_paths}"
 
 mute_sdxl_imports()
 
@@ -47,7 +47,7 @@ paths = {}
 for d, must_exist, what, options in path_dirs:
     must_exist_path = os.path.abspath(os.path.join(script_path, d, must_exist))
     if not os.path.exists(must_exist_path):
-        print(f"Warning: {what} not found at path {must_exist_path}", file=sys.stderr)
+        print(f"警告: {what} がパス {must_exist_path} に見つかりませんでした", file=sys.stderr)
     else:
         d = os.path.abspath(d)
         if "atstart" in options:

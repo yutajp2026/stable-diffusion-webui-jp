@@ -19,7 +19,7 @@ def patch(key, obj, field, replacement):
 
     patch_key = (obj, field)
     if patch_key in originals[key]:
-        raise RuntimeError(f"patch for {field} is already applied")
+        raise RuntimeError(f"{field} のパッチはすでに適用されています")
 
     original_func = getattr(obj, field)
     originals[key][patch_key] = original_func
@@ -46,7 +46,7 @@ def undo(key, obj, field):
     patch_key = (obj, field)
 
     if patch_key not in originals[key]:
-        raise RuntimeError(f"there is no patch for {field} to undo")
+        raise RuntimeError(f"{field} のパッチは適用されていません")
 
     original_func = originals[key].pop(patch_key)
     setattr(obj, field, original_func)

@@ -112,16 +112,16 @@ class Options:
                     frozen_sections = list(map(str.strip, cmd_opts.freeze_settings_in_sections.split(','))) # Trim whitespace from section names
                     section_key = info.section[0]
                     section_name = info.section[1]
-                    assert section_key not in frozen_sections, f"not possible to set '{key}' because settings in section '{section_name}' ({section_key}) are frozen with --freeze-settings-in-sections"
+                    assert section_key not in frozen_sections, f"'{section_name}' セクション ({section_key}) の設定が --freeze-settings-in-sections で凍結されているため、'{key}' を設定することはできません"
 
                 # Check that this section of the settings isn't frozen
                 if cmd_opts.freeze_specific_settings is not None:
                     frozen_keys = list(map(str.strip, cmd_opts.freeze_specific_settings.split(','))) # Trim whitespace from setting keys
-                    assert key not in frozen_keys, f"not possible to set '{key}' because this setting is frozen with --freeze-specific-settings"
+                    assert key not in frozen_keys, f"'{key}' の設定が --freeze-specific-settings で凍結されているため、変更することはできません"
 
                 # Check shorthand option which disables editing options in "saving-paths"
                 if cmd_opts.hide_ui_dir_config and key in self.restricted_opts:
-                    raise RuntimeError(f"not possible to set '{key}' because it is restricted with --hide_ui_dir_config")
+                    raise RuntimeError(f"'{key}' は --hide_ui_dir_config によって制限されているため設定できません")
 
                 self.data[key] = value
                 return
@@ -201,7 +201,7 @@ class Options:
         except FileNotFoundError:
             self.data = {}
         except Exception:
-            errors.report(f'\nCould not load settings\nThe config file "{filename}" is likely corrupted\nIt has been moved to the "tmp/config.json"\nReverting config to default\n\n''', exc_info=True)
+            errors.report(f'\n設定を読み込めませんでした\n設定ファイル「{filename}」は破損している可能性があります\n「tmp/config.json」に移動されました\n設定をデフォルトに戻します\n\n''', exc_info=True)
             os.replace(filename, os.path.join(script_path, "tmp", "config.json"))
             self.data = {}
         # 1.6.0 VAE defaults
@@ -220,11 +220,11 @@ class Options:
         for k, v in self.data.items():
             info = self.data_labels.get(k, None)
             if info is not None and not self.same_type(info.default, v):
-                print(f"Warning: bad setting value: {k}: {v} ({type(v).__name__}; expected {type(info.default).__name__})", file=sys.stderr)
+                print(f"警告: 不正な設定値: {k}: {v} ({type(v).__name__}; 期待される型 {type(info.default).__name__})", file=sys.stderr)
                 bad_settings += 1
 
         if bad_settings > 0:
-            print(f"The program is likely to not work with bad settings.\nSettings file: {filename}\nEither fix the file, or delete it and restart.", file=sys.stderr)
+            print(f"警告: 不正な設定値が見つかりました。\n設定ファイル: {filename}\nファイルを修正するか、削除して再起動してください。", file=sys.stderr)
 
     def onchange(self, key, func, call=True):
         item = self.data_labels.get(key)
