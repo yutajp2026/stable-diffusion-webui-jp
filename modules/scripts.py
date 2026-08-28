@@ -516,7 +516,7 @@ def load_scripts():
             register_scripts_from_module(script_module)
 
         except Exception:
-            errors.report(f"Error loading script: {scriptfile.filename}", exc_info=True)
+            errors.report(f"スクリプトの読み込み中にエラーが発生しました: {scriptfile.filename}", exc_info=True)
 
         finally:
             sys.path = syspath
@@ -534,7 +534,7 @@ def wrap_call(func, filename, funcname, *args, default=None, **kwargs):
     try:
         return func(*args, **kwargs)
     except Exception:
-        errors.report(f"Error calling: {filename}/{funcname}", exc_info=True)
+        errors.report(f"{filename}/{funcname} の呼び出し中にエラーが発生しました", exc_info=True)
 
     return default
 
@@ -588,7 +588,7 @@ class ScriptRunner:
             try:
                 script = script_data.script_class()
             except Exception:
-                errors.report(f"Error # failed to initialize Script {script_data.module}: ", exc_info=True)
+                errors.report(f"スクリプト {script_data.module} の初期化に失敗しました: ", exc_info=True)
                 continue
 
             script.filename = script_data.path
@@ -639,7 +639,7 @@ class ScriptRunner:
         try:
             self.create_script_ui_inner(script)
         except Exception:
-            errors.report(f"Error creating UI for {script.name}: ", exc_info=True)
+            errors.report(f"{script.name} の UI 作成中にエラーが発生しました: ", exc_info=True)
 
     def create_script_ui_inner(self, script):
         import modules.api.models as api_models
@@ -753,7 +753,7 @@ class ScriptRunner:
                     return gr.update(visible=visibility)
                 except ValueError:
                     params['Script'] = None
-                    massage = f'Cannot find Script: "{title}"'
+                    massage = f'スクリプトが見つかりません: "{title}"'
                     print(massage)
                     gr.Warning(massage)
             return gr.update(visible=False)
@@ -823,7 +823,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.before_process(p, *script_args)
             except Exception:
-                errors.report(f"Error running before_process: {script.filename}", exc_info=True)
+                errors.report(f"before_process 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def process(self, p):
         for script in self.ordered_scripts('process'):
@@ -831,7 +831,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.process(p, *script_args)
             except Exception:
-                errors.report(f"Error running process: {script.filename}", exc_info=True)
+                errors.report(f"process 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def process_before_every_sampling(self, p, **kwargs):
         for script in self.ordered_scripts('process_before_every_sampling'):
@@ -839,7 +839,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.process_before_every_sampling(p, *script_args, **kwargs)
             except Exception:
-                errors.report(f"Error running process_before_every_sampling: {script.filename}", exc_info=True)
+                errors.report(f"process_before_every_sampling 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def before_process_batch(self, p, **kwargs):
         for script in self.ordered_scripts('before_process_batch'):
@@ -847,7 +847,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.before_process_batch(p, *script_args, **kwargs)
             except Exception:
-                errors.report(f"Error running before_process_batch: {script.filename}", exc_info=True)
+                errors.report(f"before_process_batch 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def after_extra_networks_activate(self, p, **kwargs):
         for script in self.ordered_scripts('after_extra_networks_activate'):
@@ -855,7 +855,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.after_extra_networks_activate(p, *script_args, **kwargs)
             except Exception:
-                errors.report(f"Error running after_extra_networks_activate: {script.filename}", exc_info=True)
+                errors.report(f"after_extra_networks_activate 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def process_batch(self, p, **kwargs):
         for script in self.ordered_scripts('process_batch'):
@@ -863,7 +863,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.process_batch(p, *script_args, **kwargs)
             except Exception:
-                errors.report(f"Error running process_batch: {script.filename}", exc_info=True)
+                errors.report(f"process_batch 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess(self, p, processed):
         for script in self.ordered_scripts('postprocess'):
@@ -871,7 +871,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess(p, processed, *script_args)
             except Exception:
-                errors.report(f"Error running postprocess: {script.filename}", exc_info=True)
+                errors.report(f"postprocess 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess_batch(self, p, images, **kwargs):
         for script in self.ordered_scripts('postprocess_batch'):
@@ -879,7 +879,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess_batch(p, *script_args, images=images, **kwargs)
             except Exception:
-                errors.report(f"Error running postprocess_batch: {script.filename}", exc_info=True)
+                errors.report(f"postprocess_batch 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess_batch_list(self, p, pp: PostprocessBatchListArgs, **kwargs):
         for script in self.ordered_scripts('postprocess_batch_list'):
@@ -887,7 +887,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess_batch_list(p, pp, *script_args, **kwargs)
             except Exception:
-                errors.report(f"Error running postprocess_batch_list: {script.filename}", exc_info=True)
+                errors.report(f"postprocess_batch_list 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def post_sample(self, p, ps: PostSampleArgs):
         for script in self.ordered_scripts('post_sample'):
@@ -895,7 +895,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.post_sample(p, ps, *script_args)
             except Exception:
-                errors.report(f"Error running post_sample: {script.filename}", exc_info=True)
+                errors.report(f"post_sample 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def on_mask_blend(self, p, mba: MaskBlendArgs):
         for script in self.ordered_scripts('on_mask_blend'):
@@ -903,7 +903,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.on_mask_blend(p, mba, *script_args)
             except Exception:
-                errors.report(f"Error running post_sample: {script.filename}", exc_info=True)
+                errors.report(f"on_mask_blend 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess_image(self, p, pp: PostprocessImageArgs):
         for script in self.ordered_scripts('postprocess_image'):
@@ -911,7 +911,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess_image(p, pp, *script_args)
             except Exception:
-                errors.report(f"Error running postprocess_image: {script.filename}", exc_info=True)
+                errors.report(f"postprocess_image 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess_maskoverlay(self, p, ppmo: PostProcessMaskOverlayArgs):
         for script in self.ordered_scripts('postprocess_maskoverlay'):
@@ -919,7 +919,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess_maskoverlay(p, ppmo, *script_args)
             except Exception:
-                errors.report(f"Error running postprocess_image: {script.filename}", exc_info=True)
+                errors.report(f"postprocess_maskoverlay 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def postprocess_image_after_composite(self, p, pp: PostprocessImageArgs):
         for script in self.ordered_scripts('postprocess_image_after_composite'):
@@ -927,33 +927,33 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.postprocess_image_after_composite(p, pp, *script_args)
             except Exception:
-                errors.report(f"Error running postprocess_image_after_composite: {script.filename}", exc_info=True)
+                errors.report(f"postprocess_image_after_composite 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def before_component(self, component, **kwargs):
         for callback, script in self.on_before_component_elem_id.get(kwargs.get("elem_id"), []):
             try:
                 callback(OnComponent(component=component))
             except Exception:
-                errors.report(f"Error running on_before_component: {script.filename}", exc_info=True)
+                errors.report(f"before_component 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
         for script in self.ordered_scripts('before_component'):
             try:
                 script.before_component(component, **kwargs)
             except Exception:
-                errors.report(f"Error running before_component: {script.filename}", exc_info=True)
+                errors.report(f"before_component 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def after_component(self, component, **kwargs):
         for callback, script in self.on_after_component_elem_id.get(component.elem_id, []):
             try:
                 callback(OnComponent(component=component))
             except Exception:
-                errors.report(f"Error running on_after_component: {script.filename}", exc_info=True)
+                errors.report(f"after_component 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
         for script in self.ordered_scripts('after_component'):
             try:
                 script.after_component(component, **kwargs)
             except Exception:
-                errors.report(f"Error running after_component: {script.filename}", exc_info=True)
+                errors.report(f"after_component 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def script(self, title):
         return self.title_map.get(title.lower())
@@ -982,7 +982,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.before_hr(p, *script_args)
             except Exception:
-                errors.report(f"Error running before_hr: {script.filename}", exc_info=True)
+                errors.report(f"before_hr 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def setup_scrips(self, p, *, is_ui=True):
         for script in self.ordered_scripts('setup'):
@@ -993,7 +993,7 @@ class ScriptRunner:
                 script_args = p.script_args[script.args_from:script.args_to]
                 script.setup(p, *script_args)
             except Exception:
-                errors.report(f"Error running setup: {script.filename}", exc_info=True)
+                errors.report(f"setup 実行中にエラーが発生しました: {script.filename}", exc_info=True)
 
     def set_named_arg(self, args, script_name, arg_elem_id, value, fuzzy=False):
         """Locate an arg of a specific script in script_args and set its value
@@ -1009,7 +1009,7 @@ class ScriptRunner:
         """
         script = next((x for x in self.scripts if x.name == script_name), None)
         if script is None:
-            raise RuntimeError(f"script {script_name} not found")
+            raise RuntimeError(f"スクリプト {script_name} が見つかりません")
 
         for i, control in enumerate(script.controls):
             if arg_elem_id in control.elem_id if fuzzy else arg_elem_id == control.elem_id:
@@ -1021,8 +1021,8 @@ class ScriptRunner:
                     args[index] = value
                     return args
                 else:
-                    raise RuntimeError(f"args is not a list or tuple, but {type(args)}")
-        raise RuntimeError(f"arg_elem_id {arg_elem_id} not found in script {script_name}")
+                    raise RuntimeError(f"argsはリストまたはタプルではなく、{type(args)}です")
+        raise RuntimeError(f"スクリプト {script_name} に arg_elem_id {arg_elem_id} が見つかりません")
 
 
 scripts_txt2img: ScriptRunner = None

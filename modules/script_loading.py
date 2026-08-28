@@ -32,4 +32,4 @@ def preload_extensions(extensions_dir, parser, extension_list=None):
                 module.preload(parser)
 
         except Exception:
-            errors.report(f"Error running preload() for {preload_script}", exc_info=True)
+            errors.report(f"{preload_script} の preload() 実行中にエラーが発生しました", exc_info=True)

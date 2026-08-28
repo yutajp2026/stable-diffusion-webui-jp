@@ -61,7 +61,7 @@ class RestrictedUnpickler(pickle.Unpickler):
             return set
 
         # Forbid everything else.
-        raise Exception(f"global '{module}/{name}' is forbidden")
+        raise Exception(f"グローバル '{module}/{name}' は禁止されています")
 
 
 # Regular expression that accepts 'dirname/version', 'dirname/byteorder', 'dirname/data.pkl', '.data/serialization_id', and 'dirname/data/<number>'
@@ -73,7 +73,7 @@ def check_zip_filenames(filename, names):
         if allowed_zip_names_re.match(name):
             continue
 
-        raise Exception(f"bad file inside {filename}: {name}")
+        raise Exception(f"{filename} の中に不正なファイルがあります: {name}")
 
 
 def check_pt(filename, extra_handler):
@@ -86,9 +86,9 @@ def check_pt(filename, extra_handler):
             # find filename of data.pkl in zip file: '<directory name>/data.pkl'
             data_pkl_filenames = [f for f in z.namelist() if data_pkl_re.match(f)]
             if len(data_pkl_filenames) == 0:
-                raise Exception(f"data.pkl not found in {filename}")
+                raise Exception(f"data.pkl が {filename} に見つかりません")
             if len(data_pkl_filenames) > 1:
-                raise Exception(f"Multiple data.pkl found in {filename}")
+                raise Exception(f"複数の data.pkl が {filename} に見つかりました")
             with z.open(data_pkl_filenames[0]) as file:
                 unpickler = RestrictedUnpickler(file)
                 unpickler.extra_handler = extra_handler
@@ -138,17 +138,25 @@ def load_with_extra(filename, extra_handler=None, *args, **kwargs):
 
     except pickle.UnpicklingError:
         errors.report(
-            f"Error verifying pickled file from {filename}\n"
-            "-----> !!!! The file is most likely corrupted !!!! <-----\n"
-            "You can skip this check with --disable-safe-unpickle commandline argument, but that is not going to help you.\n\n",
+            f"{filename} からのピクルドファイルの検証中にエラーが発生しました\n"
+            "-----> !!!! そのファイルはおそらく破損しています！！！！ <-----\n"
+            "このチェックは --disable-safe-unpickle コマンドライン引数でスキップできますが、それでは役に立ちません。\n\n",
             exc_info=True,
         )
         return None
     except Exception:
         errors.report(
-            f"Error verifying pickled file from {filename}\n"
-            f"The file may be malicious, so the program is not going to read it.\n"
-            f"You can skip this check with --disable-safe-unpickle commandline argument.\n\n",
+            f"{filename} からのピクルドファイルの検証中にエラーが発生しました\n"
+            f"ファイルは悪意のあるものである可能性がありますので、プログラムはそれを読み込みません。\n"
+            f"--disable-safe-unpickle コマンドライン引数でこのチェックをスキップできますが、それは役に立ちません。\n\n",
+            exc_info=True,
+        )
+        return None
+    except Exception:
+        errors.report(
+            f"{filename} からのピクルドファイルの検証中にエラーが発生しました\n"
+            f"ファイルは悪意のあるものである可能性がありますので、プログラムはそれを読み込みません。\n"
+            f"--disable-safe-unpickle コマンドライン引数でこのチェックをスキップできますが、それは役に立ちません。\n\n",
             exc_info=True,
         )
         return None

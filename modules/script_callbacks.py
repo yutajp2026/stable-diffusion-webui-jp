@@ -12,7 +12,7 @@ from modules import errors, timer, extensions, shared, util
 
 
 def report_exception(c, job):
-    errors.report(f"Error executing callback {job} for {c.script}", exc_info=True)
+    errors.report(f"{c.script} の {job} コールバックの実行中にエラーが発生しました", exc_info=True)
 
 
 class ImageSaveParams:

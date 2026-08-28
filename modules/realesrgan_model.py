@@ -33,7 +33,7 @@ class UpscalerRealESRGAN(Upscaler):
         try:
             info = self.load_model(path)
         except Exception:
-            errors.report(f"Unable to load RealESRGAN model {path}", exc_info=True)
+            errors.report(f"RealESRGANモデル {path} を読み込めません", exc_info=True)
             return img
 
         model_descriptor = modelloader.load_spandrel_model(
@@ -59,9 +59,9 @@ class UpscalerRealESRGAN(Upscaler):
                         model_dir=self.model_download_path,
                     )
                 if not os.path.exists(scaler.local_data_path):
-                    raise FileNotFoundError(f"RealESRGAN data missing: {scaler.local_data_path}")
+                    raise FileNotFoundError(f"RealESRGANデータが見つかりません: {scaler.local_data_path}")
                 return scaler
-        raise ValueError(f"Unable to find model info: {path}")
+        raise ValueError(f"モデル情報が見つかりません: {path}")
 
 
 def get_realesrgan_models(scaler: UpscalerRealESRGAN):

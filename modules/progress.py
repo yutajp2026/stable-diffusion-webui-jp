@@ -149,4 +149,4 @@ def restore_progress(id_task):
     if res is not None:
         return res
 
-    return gr.update(), gr.update(), gr.update(), f"Couldn't restore progress for {id_task}: results either have been discarded or never were obtained"
+    return gr.update(), gr.update(), gr.update(), f"{id_task} の進行状況を復元できませんでした：結果は破棄されたか、あるいはそもそも取得されていませんでした。"
