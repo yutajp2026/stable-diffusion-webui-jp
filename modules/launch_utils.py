@@ -266,7 +266,7 @@ def run_extensions_installers(settings_file):
     if not os.path.isdir(extensions_dir):
         return
 
-    with startup_timer.subcategory("run extensions installers"):
+    with startup_timer.subcategory("拡張機能インストーラーを実行する"):
         for dirname_extension in list_extensions(settings_file):
             logging.debug(f"{dirname_extension}をインストール中...")
 
@@ -368,11 +368,11 @@ def prepare_environment():
     if not args.skip_python_version_check:
         check_python_version()
 
-    startup_timer.record("checks")
+    startup_timer.record("チェック")
 
     commit = commit_hash()
     tag = git_tag()
-    startup_timer.record("git version info")
+    startup_timer.record("git のバージョン情報")
 
     print(f"バージョン: {tag}")
     print(f"コミットハッシュ: {commit}")
@@ -380,7 +380,7 @@ def prepare_environment():
 
     if args.reinstall_torch or not is_installed("torch") or not is_installed("torchvision"):
         run(f'"{python}" -m {torch_command}', "torchとtorchvisionをインストール中...", "torchをインストールできませんでした", live=True)
-        startup_timer.record("install torch")
+        startup_timer.record("torchのインストール")
 
     if args.use_ipex:
         args.skip_torch_cuda_test = True
@@ -389,25 +389,25 @@ def prepare_environment():
             'TorchはGPUを使えません; '
             'このチェックを無効にするには、変数COMMANDLINE_ARGSに --skip-torch-cuda-test を追加してください'
         )
-    startup_timer.record("torch GPU test")
+    startup_timer.record("torch GPUテスト")
 
     if not is_installed("clip"):
         run_pip("install setuptools==69.5.1", "setuptools")
         run_pip("install wheel", "wheel")
         run_pip(f"install --no-build-isolation {clip_package}", "clip")
-        startup_timer.record("install clip")
+        startup_timer.record("clipのインストール")
 
     if not is_installed("open_clip"):
         run_pip(f"install {openclip_package}", "open_clip")
-        startup_timer.record("install open_clip")
+        startup_timer.record("open_clipのインストール")
 
     if (not is_installed("xformers") or args.reinstall_xformers) and args.xformers:
         run_pip(f"install -U -I --no-deps {xformers_package}", "xformers")
-        startup_timer.record("install xformers")
+        startup_timer.record("xformersのインストール")
 
     if not is_installed("ngrok") and args.ngrok:
         run_pip("install ngrok", "ngrok")
-        startup_timer.record("install ngrok")
+        startup_timer.record("ngrokのインストール")
 
     os.makedirs(os.path.join(script_path, dir_repos), exist_ok=True)
 
@@ -417,32 +417,32 @@ def prepare_environment():
     git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
     git_clone(blip_repo, repo_dir('BLIP'), "BLIP", blip_commit_hash)
 
-    startup_timer.record("clone repositores")
+    startup_timer.record("リポジトリをクローンする")
 
     if not os.path.isfile(requirements_file):
         requirements_file = os.path.join(script_path, requirements_file)
 
     if not requirements_met(requirements_file):
         run_pip(f"install -r \"{requirements_file}\"", "requirements")
-        startup_timer.record("install requirements")
+        startup_timer.record("requirementsのインストール")
 
     if not os.path.isfile(requirements_file_for_npu):
         requirements_file_for_npu = os.path.join(script_path, requirements_file_for_npu)
 
     if "torch_npu" in torch_command and not requirements_met(requirements_file_for_npu):
         run_pip(f"install -r \"{requirements_file_for_npu}\"", "requirements_for_npu")
-        startup_timer.record("install requirements_for_npu")
+        startup_timer.record("requirements_for_npuのインストール")
 
     if not args.skip_install:
         run_extensions_installers(settings_file=args.ui_settings_file)
 
     if args.update_check:
         version_check(commit)
-        startup_timer.record("check version")
+        startup_timer.record("バージョンをチェックする")
 
     if args.update_all_extensions:
         git_pull_recursive(extensions_dir)
-        startup_timer.record("update extensions")
+        startup_timer.record("拡張機能を更新する")
 
     if "--exit" in sys.argv:
         print("--exit引数があるので終了します。")

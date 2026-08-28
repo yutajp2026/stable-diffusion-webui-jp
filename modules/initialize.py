@@ -59,18 +59,18 @@ def initialize():
 
     from modules import sd_models
     sd_models.setup_model()
-    startup_timer.record("setup SD model")
+    startup_timer.record("SDモデルを設定する")
 
     from modules.shared_cmd_options import cmd_opts
 
     from modules import codeformer_model
     warnings.filterwarnings(action="ignore", category=UserWarning, module="torchvision.transforms.functional_tensor")
     codeformer_model.setup_model(cmd_opts.codeformer_models_path)
-    startup_timer.record("setup codeformer")
+    startup_timer.record("CodeFormerを設定する")
 
     from modules import gfpgan_model
     gfpgan_model.setup_model(cmd_opts.gfpgan_models_path)
-    startup_timer.record("setup gfpgan")
+    startup_timer.record("GFPGANを設定する")
 
     initialize_rest(reload_script_modules=False)
 
@@ -83,15 +83,15 @@ def initialize_rest(*, reload_script_modules=False):
 
     from modules import sd_samplers
     sd_samplers.set_samplers()
-    startup_timer.record("set samplers")
+    startup_timer.record("サンプラーを設定する")
 
     from modules import extensions
     extensions.list_extensions()
-    startup_timer.record("list extensions")
+    startup_timer.record("拡張機能をリストアップする")
 
     from modules import initialize_util
     initialize_util.restore_config_state_file()
-    startup_timer.record("restore config state file")
+    startup_timer.record("設定状態ファイルを復元する")
 
     from modules import shared, upscaler, scripts
     if cmd_opts.ui_debug_mode:
@@ -101,11 +101,11 @@ def initialize_rest(*, reload_script_modules=False):
 
     from modules import sd_models
     sd_models.list_models()
-    startup_timer.record("list SD models")
+    startup_timer.record("SDモデルをリストアップする")
 
     from modules import localization
     localization.list_localizations(cmd_opts.localizations_dir)
-    startup_timer.record("list localizations")
+    startup_timer.record("ローカリゼーションをリストアップする")
 
     with startup_timer.subcategory("スクリプトを読み込む"):
         scripts.load_scripts()
@@ -113,19 +113,19 @@ def initialize_rest(*, reload_script_modules=False):
     if reload_script_modules and shared.opts.enable_reloading_ui_scripts:
         for module in [module for name, module in sys.modules.items() if name.startswith("modules.ui")]:
             importlib.reload(module)
-        startup_timer.record("reload script modules")
+        startup_timer.record("スクリプトモジュールをリロードする")
 
     from modules import modelloader
     modelloader.load_upscalers()
-    startup_timer.record("load upscalers")
+    startup_timer.record("アップスケーラーを読み込む")
 
     from modules import sd_vae
     sd_vae.refresh_vae_list()
-    startup_timer.record("refresh VAE")
+    startup_timer.record("VAEを更新する")
 
     from modules import textual_inversion
     textual_inversion.textual_inversion.list_textual_inversion_templates()
-    startup_timer.record("refresh textual inversion templates")
+    startup_timer.record("テキスト反転テンプレートを更新する")
 
     from modules import script_callbacks, sd_hijack_optimizations, sd_hijack
     script_callbacks.on_list_optimizers(sd_hijack_optimizations.list_optimizers)
@@ -157,7 +157,7 @@ def initialize_rest(*, reload_script_modules=False):
 
     from modules import shared_items
     shared_items.reload_hypernetworks()
-    startup_timer.record("reload hypernetworks")
+    startup_timer.record("ハイパーネットワークをリロードする")
 
     from modules import ui_extra_networks
     ui_extra_networks.initialize()

@@ -32,7 +32,7 @@ def main():
 
         exit(0)
 
-    launch_utils.startup_timer.record("initial startup")
+    launch_utils.startup_timer.record("初期起動")
 
     with launch_utils.startup_timer.subcategory("環境を準備する"):
         if not args.skip_prepare_environment:

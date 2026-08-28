@@ -87,7 +87,7 @@ def restore_config_state_file():
         with open(config_state_file, "r", encoding="utf-8") as f:
             config_state = json.load(f)
             config_states.restore_extension_config(config_state)
-        startup_timer.record("restore extension config")
+        startup_timer.record("拡張機能の設定を復元する")
     elif config_state_file:
         print(f"!!! 設定状態のバックアップが見つかりません: {config_state_file}")
 
@@ -186,7 +186,7 @@ def configure_opts_onchange():
     shared.opts.onchange("cross_attention_optimization", wrap_queued_call(lambda: sd_hijack.model_hijack.redo_hijack(shared.sd_model)), call=False)
     shared.opts.onchange("fp8_storage", wrap_queued_call(lambda: sd_models.reload_model_weights()), call=False)
     shared.opts.onchange("cache_fp16_weight", wrap_queued_call(lambda: sd_models.reload_model_weights(forced_reload=True)), call=False)
-    startup_timer.record("opts onchange")
+    startup_timer.record("オプション変更")
 
 
 def setup_middleware(app):

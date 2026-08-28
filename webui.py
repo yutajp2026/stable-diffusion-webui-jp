@@ -8,7 +8,7 @@ from modules import initialize_util
 from modules import initialize
 
 startup_timer = timer.startup_timer
-startup_timer.record("launcher")
+startup_timer.record("ランチャー")
 
 initialize.imports()
 
@@ -56,7 +56,7 @@ def webui():
     while 1:
         if shared.opts.clean_temp_dir_at_start:
             ui_tempdir.cleanup_tmpdr()
-            startup_timer.record("cleanup temp dir")
+            startup_timer.record("一時ディレクトリのクリーンアップ")
 
         script_callbacks.before_ui_callback()
         startup_timer.record("scripts before_ui_callback")
@@ -113,7 +113,7 @@ def webui():
 
         ui_extra_networks.add_pages_to_demo(app)
 
-        startup_timer.record("add APIs")
+        startup_timer.record("APIの追加")
 
         with startup_timer.subcategory("app_started_callback"):
             script_callbacks.app_started_callback(shared.demo, app)
@@ -147,9 +147,9 @@ def webui():
         time.sleep(0.5)
         startup_timer.reset()
         script_callbacks.app_reload_callback()
-        startup_timer.record("app reload callback")
+        startup_timer.record("アプリ再読み込みコールバック")
         script_callbacks.script_unloaded_callback()
-        startup_timer.record("scripts unloaded callback")
+        startup_timer.record("スクリプトのアンロードコールバック")
         initialize.initialize_rest(reload_script_modules=True)
 
 
