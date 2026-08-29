@@ -138,7 +138,7 @@ def resolve_vae_from_setting() -> VaeResolution:
         return VaeResolution(vae_from_options, 'specified in settings')
 
     if not is_automatic():
-        print(f"Couldn't find VAE named {shared.opts.sd_vae}; using None instead")
+        print(f"VAE {shared.opts.sd_vae} が見つかりませんでした；代わりに None を使用します。")
 
     return VaeResolution(resolved=False)
 
@@ -160,7 +160,7 @@ def resolve_vae_from_user_metadata(checkpoint_file) -> VaeResolution:
 def resolve_vae_near_checkpoint(checkpoint_file) -> VaeResolution:
     vae_near_checkpoint = find_vae_near_checkpoint(checkpoint_file)
     if vae_near_checkpoint is not None and (not shared.opts.sd_vae_overrides_per_model_preferences or is_automatic()):
-        return VaeResolution(vae_near_checkpoint, 'found near the checkpoint')
+        return VaeResolution(vae_near_checkpoint, 'チェックポイントの近くで見つかった')
 
     return VaeResolution(resolved=False)
 
@@ -279,5 +279,5 @@ def reload_vae_weights(sd_model=None, vae_file=unspecified):
 
     script_callbacks.model_loaded_callback(sd_model)
 
-    print("VAE weights loaded.")
+    print("VAEの重みが読み込まれました。")
     return sd_model

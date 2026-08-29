@@ -90,7 +90,7 @@ def download_model(model_path, model_url):
     if not os.path.exists(model_path):
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
-        print(f'Downloading TAESD model to: {model_path}')
+        print(f'TAESDモデルをダウンロード中: {model_path}')
         torch.hub.download_url_to_file(model_url, model_path)
 
 
@@ -114,7 +114,7 @@ def decoder_model():
             loaded_model.to(devices.device, devices.dtype)
             sd_vae_taesd_models[model_name] = loaded_model
         else:
-            raise FileNotFoundError('TAESD model not found')
+            raise FileNotFoundError('TAESDモデルが見つかりませんでした')
 
     return loaded_model.decoder
 
@@ -139,6 +139,6 @@ def encoder_model():
             loaded_model.to(devices.device, devices.dtype)
             sd_vae_taesd_models[model_name] = loaded_model
         else:
-            raise FileNotFoundError('TAESD model not found')
+            raise FileNotFoundError('TAESDモデルが見つかりませんでした')
 
     return loaded_model.encoder

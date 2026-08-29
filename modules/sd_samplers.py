@@ -126,7 +126,7 @@ def fix_p_invalid_sampler_and_scheduler(p):
     i_sampler_name, i_scheduler = p.sampler_name, p.scheduler
     p.sampler_name, p.scheduler = get_sampler_and_scheduler(p.sampler_name, p.scheduler, convert_automatic=False)
     if p.sampler_name != i_sampler_name or i_scheduler != p.scheduler:
-        logging.warning(f'Sampler Scheduler autocorrection: "{i_sampler_name}" -> "{p.sampler_name}", "{i_scheduler}" -> "{p.scheduler}"')
+        logging.warning(f'サンプラー スケジューラの自動補正: "{i_sampler_name}" -> "{p.sampler_name}", "{i_scheduler}" -> "{p.scheduler}"')
 
 
 set_samplers()

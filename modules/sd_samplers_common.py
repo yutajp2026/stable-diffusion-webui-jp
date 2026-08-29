@@ -272,9 +272,9 @@ class Sampler:
             return func()
         except RecursionError:
             print(
-                'Encountered RecursionError during sampling, returning last latent. '
-                'rho >5 with a polyexponential scheduler may cause this error. '
-                'You should try to use a smaller rho value instead.'
+                'サンプリング中にRecursionErrorが発生したので、最後の潜在変数を返します。 '
+                'ポリ指数スケジューラを使用したρ>5は、このエラーを引き起こす可能性があります。 '
+                '代わりに、より小さいρの値を使うように試みるべきです。'
             )
             return self.last_latent
         except InterruptedException:
