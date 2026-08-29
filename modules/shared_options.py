@@ -256,7 +256,7 @@ options_templates.update(options_section(('compatibility', "互換性", "sd"), {
     "refiner_switch_by_sample_steps": OptionInfo(False, "モデル timestep ではなくサンプリングステップで refiner を切り替える。古い refiner の挙動。", infotext="Refiner switch by sampling steps")
 }))
 
-options_templates.update(options_section(('interrogate', "Interrogate"), {
+options_templates.update(options_section(('interrogate', "尋問する"), {
     "interrogate_keep_models_in_memory": OptionInfo(False, "VRAM にモデルを保持"),
     "interrogate_return_ranks": OptionInfo(False, "結果にモデルタグ一致のランクを含める").info("booru のみ"),
     "interrogate_clip_num_beams": OptionInfo(1, "BLIP: num_beams", gr.Slider, {"minimum": 1, "maximum": 16, "step": 1}),
@@ -271,7 +271,7 @@ options_templates.update(options_section(('interrogate', "Interrogate"), {
     "deepbooru_filter_tags": OptionInfo("", "deepbooru: これらのタグを除外").info("カンマ区切り"),
 }))
 
-options_templates.update(options_section(('extra_networks', "Extra Networks", "sd"), {
+options_templates.update(options_section(('extra_networks', "追加ネットワーク", "sd"), {
     "extra_networks_show_hidden_directories": OptionInfo(True, "隠しディレクトリを表示").info("ディレクトリ名が \".\" で始まる場合は隠し扱い"),
     "extra_networks_dir_button_function": OptionInfo(False, "ディレクトリボタンの先頭に '/' を追加").info("ボタンは検索フィルターとしてではなく、選択したディレクトリの内容を表示します。"),
     "extra_networks_hidden_models": OptionInfo("When searched", "隠しディレクトリ内のモデルカードを表示", gr.Radio, {"choices": ["Always", "When searched", "Never"]}).info('"When searched" オプションは検索文字列が 4 文字以上のときのみ項目を表示します'),
