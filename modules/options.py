@@ -50,11 +50,11 @@ class OptionInfo:
         return self
 
     def needs_restart(self):
-        self.comment_after += " <span class='info'>(requires restart)</span>"
+        self.comment_after += " <span class='info'>(再起動が必要)</span>"
         return self
 
     def needs_reload_ui(self):
-        self.comment_after += " <span class='info'>(requires Reload UI)</span>"
+        self.comment_after += " <span class='info'>(UI の再読み込みが必要)</span>"
         return self
 
 
@@ -105,7 +105,7 @@ class Options:
                 # Restrict component arguments
                 comp_args = info.component_args if info else None
                 if isinstance(comp_args, dict) and comp_args.get('visible', True) is False:
-                    raise RuntimeError(f"not possible to set '{key}' because it is restricted")
+                    raise RuntimeError(f"'{key}' は制限されているため、設定できません")
 
                 # Check that this section isn't frozen
                 if cmd_opts.freeze_settings_in_sections is not None:
@@ -164,7 +164,7 @@ class Options:
             try:
                 option.onchange()
             except Exception as e:
-                errors.display(e, f"changing setting {key} to {value}")
+                errors.display(e, f"{key} の設定を {value} に変更しています...")
                 setattr(self, key, oldval)
                 return False
 
@@ -180,7 +180,7 @@ class Options:
         return data_label.default
 
     def save(self, filename):
-        assert not cmd_opts.freeze_settings, "saving settings is disabled"
+        assert not cmd_opts.freeze_settings, "設定の保存が無効になっています"
 
         with open(filename, "w", encoding="utf8") as file:
             json.dump(self.data, file, indent=4, ensure_ascii=False)
