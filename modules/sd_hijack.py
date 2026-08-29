@@ -90,13 +90,13 @@ def apply_optimizations(option=None):
         matching_optimizer = optimizers[0]
 
     if matching_optimizer is not None:
-        print(f"Applying attention optimization: {matching_optimizer.name}... ", end='')
+        print(f"注意最適化を適用しています: {matching_optimizer.name}... ", end='')
         matching_optimizer.apply()
         print("done.")
         current_optimizer = matching_optimizer
         return current_optimizer.name
     else:
-        print("Disabling attention optimization")
+        print("注意最適化を無効にしています")
         return ''
 
 

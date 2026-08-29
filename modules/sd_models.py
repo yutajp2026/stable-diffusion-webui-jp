@@ -82,7 +82,7 @@ class CheckpointInfo:
             try:
                 self.metadata = cache.cached_data_for_file('safetensors-metadata', "checkpoint/" + name, filename, read_metadata)
             except Exception as e:
-                errors.display(e, f"reading metadata for {filename}")
+                errors.display(e, f"{filename} のメタデータを読み込んでいます")
 
         self.name = name
         self.name_for_extra = os.path.splitext(os.path.basename(filename))[0]
@@ -170,7 +170,7 @@ def list_models():
 
         shared.opts.data['sd_model_checkpoint'] = checkpoint_info.title
     elif cmd_ckpt is not None and cmd_ckpt != shared.default_sd_model_file:
-        print(f"Checkpoint in --ckpt argument not found (Possible it was moved to {model_path}: {cmd_ckpt}", file=sys.stderr)
+        print(f"--ckpt 引数で指定されたチェックポイントが見つかりません (おそらく {model_path} に移動されています): {cmd_ckpt}", file=sys.stderr)
 
     for filename in model_list:
         checkpoint_info = CheckpointInfo(filename)
@@ -224,18 +224,18 @@ def select_checkpoint():
         return checkpoint_info
 
     if len(checkpoints_list) == 0:
-        error_message = "No checkpoints found. When searching for checkpoints, looked at:"
+        error_message = "チェックポイントが見つかりません。チェックポイントを検索するとき、次を確認しました:"
         if shared.cmd_opts.ckpt is not None:
             error_message += f"\n - file {os.path.abspath(shared.cmd_opts.ckpt)}"
         error_message += f"\n - directory {model_path}"
         if shared.cmd_opts.ckpt_dir is not None:
             error_message += f"\n - directory {os.path.abspath(shared.cmd_opts.ckpt_dir)}"
-        error_message += "Can't run without a checkpoint. Find and place a .ckpt or .safetensors file into any of those locations."
+        error_message += "チェックポイントなしでは実行できません。.ckpt または .safetensors ファイルをこれらの場所のいずれかに配置してください。"
         raise FileNotFoundError(error_message)
 
     checkpoint_info = next(iter(checkpoints_list.values()))
     if model_checkpoint is not None:
-        print(f"Checkpoint {model_checkpoint} not found; loading fallback {checkpoint_info.title}", file=sys.stderr)
+        print(f"チェックポイント {model_checkpoint} が見つかりません; フォールバック {checkpoint_info.title} を読み込んでいます", file=sys.stderr)
 
     return checkpoint_info
 
@@ -289,7 +289,7 @@ def read_metadata_from_safetensors(filename):
         metadata_len = int.from_bytes(metadata_len, "little")
         json_start = file.read(2)
 
-        assert metadata_len > 2 and json_start in (b'{"', b"{'"), f"{filename} is not a safetensors file"
+        assert metadata_len > 2 and json_start in (b'{"', b"{'"), f"{filename} はsafetensors ファイルではありません"
 
         res = {}
 
@@ -304,7 +304,7 @@ def read_metadata_from_safetensors(filename):
                     except Exception:
                         pass
         except Exception:
-             errors.report(f"Error reading metadata from file: {filename}", exc_info=True)
+             errors.report(f"{filename} のメタデータを読み込んでいます", exc_info=True)
 
         return res
 
@@ -331,18 +331,18 @@ def read_state_dict(checkpoint_file, print_global_state=False, map_location=None
 
 def get_checkpoint_state_dict(checkpoint_info: CheckpointInfo, timer):
     sd_model_hash = checkpoint_info.calculate_shorthash()
-    timer.record("calculate hash")
+    timer.record("ハッシュを計算する")
 
     if checkpoint_info in checkpoints_loaded:
         # use checkpoint cache
-        print(f"Loading weights [{sd_model_hash}] from cache")
+        print(f"重み [{sd_model_hash}] をキャッシュから読み込んでいます")
         # move to end as latest
         checkpoints_loaded.move_to_end(checkpoint_info)
         return checkpoints_loaded[checkpoint_info]
 
-    print(f"Loading weights [{sd_model_hash}] from {checkpoint_info.filename}")
+    print(f"重み [{sd_model_hash}] を {checkpoint_info.filename} から読み込んでいます")
     res = read_state_dict(checkpoint_info.filename)
-    timer.record("load weights from disk")
+    timer.record("ディスクから重みを読み込む")
 
     return res
 
@@ -409,7 +409,7 @@ def set_model_fields(model):
 
 def load_model_weights(model, checkpoint_info: CheckpointInfo, state_dict, timer):
     sd_model_hash = checkpoint_info.calculate_shorthash()
-    timer.record("calculate hash")
+    timer.record("ハッシュを計算する")
 
     if devices.fp8:
         # prevent model to load state dict in fp8
@@ -438,7 +438,7 @@ def load_model_weights(model, checkpoint_info: CheckpointInfo, state_dict, timer
         model.before_load_weights(state_dict)
 
     model.load_state_dict(state_dict, strict=False)
-    timer.record("apply weights to model")
+    timer.record("重みをモデルに適用する")
 
     if hasattr(model, "after_load_weights"):
         model.after_load_weights(state_dict)
@@ -466,7 +466,7 @@ def load_model_weights(model, checkpoint_info: CheckpointInfo, state_dict, timer
         model.float()
         model.alphas_cumprod_original = model.alphas_cumprod
         devices.dtype_unet = torch.float32
-        assert shared.cmd_opts.precision != "half", "Cannot use --precision half with --no-half"
+        assert shared.cmd_opts.precision != "half", "--no-half と一緒に --precision half を使用することはできません"
         timer.record("apply float()")
     else:
         vae = model.first_stage_model
@@ -536,7 +536,7 @@ def load_model_weights(model, checkpoint_info: CheckpointInfo, state_dict, timer
     sd_vae.clear_loaded_vae()
     vae_file, vae_source = sd_vae.resolve_vae(checkpoint_info.filename).tuple()
     sd_vae.load_vae(model, vae_file, vae_source)
-    timer.record("load VAE")
+    timer.record("VAEをロードする")
 
 
 def enable_midas_autodownload():
@@ -573,9 +573,9 @@ def enable_midas_autodownload():
             if not os.path.exists(midas_path):
                 os.mkdir(midas_path)
 
-            print(f"Downloading midas model weights for {model_type} to {path}")
+            print(f"{model_type} の Midas モデルの重みを {path} にダウンロードしています...")
             request.urlretrieve(midas_urls[model_type], path)
-            print(f"{model_type} downloaded")
+            print(f"{model_type} をダウンロードしました。")
 
         return midas.api.load_model_inner(model_type)
 
@@ -693,9 +693,9 @@ class SdModelData:
                     load_model()
 
                 except Exception as e:
-                    errors.display(e, "loading stable diffusion model", full_traceback=True)
+                    errors.display(e, "安定拡散モデルを読み込み中", full_traceback=True)
                     print("", file=sys.stderr)
-                    print("Stable diffusion model failed to load", file=sys.stderr)
+                    print("安定した拡散モデルの読み込みに失敗しました", file=sys.stderr)
                     self.sd_model = None
 
         return self.sd_model
@@ -794,7 +794,7 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
         model_data.sd_model = None
         devices.torch_gc()
 
-    timer.record("unload existing model")
+    timer.record("既存のモデルをアンロードする")
 
     if already_loaded_state_dict is not None:
         state_dict = already_loaded_state_dict
@@ -804,14 +804,14 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
     checkpoint_config = sd_models_config.find_checkpoint_config(state_dict, checkpoint_info)
     clip_is_included_into_sd = any(x for x in [sd1_clip_weight, sd2_clip_weight, sdxl_clip_weight, sdxl_refiner_clip_weight] if x in state_dict)
 
-    timer.record("find config")
+    timer.record("設定を見つける")
 
     sd_config = OmegaConf.load(checkpoint_config)
     repair_config(sd_config, state_dict)
 
-    timer.record("load config")
+    timer.record("設定をロードする")
 
-    print(f"Creating model from config: {checkpoint_config}")
+    print(f"設定からモデルを作成する: {checkpoint_config}")
 
     sd_model = None
     try:
@@ -820,17 +820,17 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
                 sd_model = instantiate_from_config(sd_config.model, state_dict)
 
     except Exception as e:
-        errors.display(e, "creating model quickly", full_traceback=True)
+        errors.display(e, "モデルを迅速に作成する", full_traceback=True)
 
     if sd_model is None:
-        print('Failed to create model quickly; will retry using slow method.', file=sys.stderr)
+        print('モデルの作成にすぐには失敗しました。遅い方法で再試行します。', file=sys.stderr)
 
         with sd_disable_initialization.InitializeOnMeta():
             sd_model = instantiate_from_config(sd_config.model, state_dict)
 
     sd_model.used_config = checkpoint_config
 
-    timer.record("create model")
+    timer.record("モデルを作成する")
 
     if shared.cmd_opts.no_half:
         weight_dtype_conversion = None
@@ -844,10 +844,10 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
     with sd_disable_initialization.LoadStateDictOnMeta(state_dict, device=model_target_device(sd_model), weight_dtype_conversion=weight_dtype_conversion):
         load_model_weights(sd_model, checkpoint_info, state_dict, timer)
 
-    timer.record("load weights from state dict")
+    timer.record("state dict から重みをロードする")
 
     send_model_to_device(sd_model)
-    timer.record("move model to device")
+    timer.record("モデルをデバイスに移動する")
 
     sd_hijack.model_hijack.hijack(sd_model)
 
@@ -859,7 +859,7 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
 
     sd_hijack.model_hijack.embedding_db.load_textual_inversion_embeddings(force_reload=True)  # Reload embeddings after model load as they may or may not fit the model
 
-    timer.record("load textual inversion embeddings")
+    timer.record("textual inversion embeddings をロードする")
 
     script_callbacks.model_loaded_callback(sd_model)
 
@@ -868,9 +868,9 @@ def load_model(checkpoint_info=None, already_loaded_state_dict=None):
     with devices.autocast(), torch.no_grad():
         sd_model.cond_stage_model_empty_prompt = get_empty_cond(sd_model)
 
-    timer.record("calculate empty prompt")
+    timer.record("empty prompt を計算する")
 
-    print(f"Model loaded in {timer.summary()}.")
+    print(f"モデルが {timer.summary()} にロードされました。")
 
     return sd_model
 
@@ -889,7 +889,7 @@ def reuse_model_from_already_loaded(sd_model, checkpoint_info, timer):
 
     if shared.opts.sd_checkpoints_keep_in_cpu:
         send_model_to_cpu(sd_model)
-        timer.record("send model to cpu")
+        timer.record("モデルをCPUに送る")
 
     already_loaded = None
     for i in reversed(range(len(model_data.loaded_sd_models))):
@@ -899,14 +899,14 @@ def reuse_model_from_already_loaded(sd_model, checkpoint_info, timer):
             continue
 
         if len(model_data.loaded_sd_models) > shared.opts.sd_checkpoints_limit > 0:
-            print(f"Unloading model {len(model_data.loaded_sd_models)} over the limit of {shared.opts.sd_checkpoints_limit}: {loaded_model.sd_checkpoint_info.title}")
+            print(f"モデル {len(model_data.loaded_sd_models)} を {shared.opts.sd_checkpoints_limit} の制限を超えてアンロードしています: {loaded_model.sd_checkpoint_info.title}")
             del model_data.loaded_sd_models[i]
             send_model_to_trash(loaded_model)
-            timer.record("send model to trash")
+            timer.record("モデルをゴミ箱に送る")
 
     if already_loaded is not None:
         send_model_to_device(already_loaded)
-        timer.record("send model to device")
+        timer.record("モデルをデバイスに送る")
 
         model_data.set_sd_model(already_loaded, already_loaded=True)
 
@@ -914,11 +914,11 @@ def reuse_model_from_already_loaded(sd_model, checkpoint_info, timer):
             shared.opts.data["sd_model_checkpoint"] = already_loaded.sd_checkpoint_info.title
             shared.opts.data["sd_checkpoint_hash"] = already_loaded.sd_checkpoint_info.sha256
 
-        print(f"Using already loaded model {already_loaded.sd_checkpoint_info.title}: done in {timer.summary()}")
+        print(f"既にロードされたモデル {already_loaded.sd_checkpoint_info.title} を使用しています: {timer.summary()}")
         sd_vae.reload_vae_weights(already_loaded)
         return model_data.sd_model
     elif shared.opts.sd_checkpoints_limit > 1 and len(model_data.loaded_sd_models) < shared.opts.sd_checkpoints_limit:
-        print(f"Loading model {checkpoint_info.title} ({len(model_data.loaded_sd_models) + 1} out of {shared.opts.sd_checkpoints_limit})")
+        print(f"モデル {checkpoint_info.title} をロードしています ({len(model_data.loaded_sd_models) + 1} / {shared.opts.sd_checkpoints_limit})")
 
         model_data.sd_model = None
         load_model(checkpoint_info)
@@ -931,7 +931,7 @@ def reuse_model_from_already_loaded(sd_model, checkpoint_info, timer):
         sd_vae.loaded_vae_file = getattr(sd_model, "loaded_vae_file", None)
         sd_vae.checkpoint_info = sd_model.sd_checkpoint_info
 
-        print(f"Reusing loaded model {sd_model.sd_checkpoint_info.title} to load {checkpoint_info.title}")
+        print(f"ロードされたモデル {sd_model.sd_checkpoint_info.title} を再利用して {checkpoint_info.title} をロードしています")
         return sd_model
     else:
         return None
@@ -980,7 +980,7 @@ def reload_model_weights(sd_model=None, info=None, forced_reload=False):
     try:
         load_model_weights(sd_model, checkpoint_info, state_dict, timer)
     except Exception:
-        print("Failed to load checkpoint, restoring previous")
+        print("チェックポイントの読み込みに失敗しました。前の状態を復元します")
         load_model_weights(sd_model, current_checkpoint_info, None, timer)
         raise
     finally:
@@ -989,12 +989,12 @@ def reload_model_weights(sd_model=None, info=None, forced_reload=False):
 
         if not sd_model.lowvram:
             sd_model.to(devices.device)
-            timer.record("move model to device")
+            timer.record("モデルをデバイスに移動する")
 
         script_callbacks.model_loaded_callback(sd_model)
         timer.record("script callbacks")
 
-    print(f"Weights loaded in {timer.summary()}.")
+    print(f"重みが {timer.summary()} にロードされました。")
 
     model_data.set_sd_model(sd_model)
     sd_unet.apply_unet()

@@ -257,8 +257,8 @@ def split_cross_attention_forward(self, x, context=None, mask=None, **kwargs):
 
         if steps > 64:
             max_res = math.floor(math.sqrt(math.sqrt(mem_free_total / 2.5)) / 8) * 64
-            raise RuntimeError(f'Not enough memory, use lower resolution (max approx. {max_res}x{max_res}). '
-                               f'Need: {mem_required / 64 / gb:0.1f}GB free, Have:{mem_free_total / gb:0.1f}GB free')
+            raise RuntimeError(f'メモリが不足しています。低解像度を使用してください（最大約 {max_res}x{max_res}）。 '
+                               f'必要: {mem_required / 64 / gb:0.1f}GB 空き, 所有: {mem_free_total / gb:0.1f}GB 空き')
 
         slice_size = q.shape[1] // steps
         for i in range(0, q.shape[1], slice_size):
@@ -388,7 +388,7 @@ def split_cross_attention_forward_invokeAI(self, x, context=None, mask=None, **k
 # Based on Birch-san's modified implementation of sub-quadratic attention from https://github.com/Birch-san/diffusers/pull/1
 # The sub_quad_attention_forward function is under the MIT License listed under Memory Efficient Attention in the Licenses section of the web UI interface
 def sub_quad_attention_forward(self, x, context=None, mask=None, **kwargs):
-    assert mask is None, "attention-mask not currently implemented for SubQuadraticCrossAttnProcessor."
+    assert mask is None, "attention-mask は現在、SubQuadraticCrossAttnProcessor には実装されていません。"
 
     h = self.heads
 
