@@ -187,16 +187,16 @@ def open_folder(path):
     import subprocess
 
     if not os.path.exists(path):
-        msg = f'Folder "{path}" does not exist. after you save an image, the folder will be created.'
+        msg = f'フォルダ「{path}」は存在しません。画像を保存すると、フォルダが作成されます。'
         print(msg)
         gr.Info(msg)
         return
     elif not os.path.isdir(path):
         msg = f"""
-WARNING
-An open_folder request was made with an path that is not a folder.
-This could be an error or a malicious attempt to run code on your computer.
-Requested path was: {path}
+警告
+open_folder リクエストが、フォルダでないパスで行われました。
+これはエラーであるか、コンピュータ上でコードを実行しようとする悪意のある試みの可能性があります。
+要求されたパス: {path}
 """
         print(msg, file=sys.stderr)
         gr.Warning(msg)

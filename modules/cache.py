@@ -41,7 +41,7 @@ def convert_old_cached_data():
 
     total_count = sum(len(keyvalues) for keyvalues in data.values())
 
-    with tqdm.tqdm(total=total_count, desc="converting cache") as progress:
+    with tqdm.tqdm(total=total_count, desc="キャッシュの変換") as progress:
         for subsection, keyvalues in data.items():
             cache_obj = caches.get(subsection)
             if cache_obj is None:

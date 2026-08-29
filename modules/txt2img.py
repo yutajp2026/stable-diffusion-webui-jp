@@ -56,8 +56,8 @@ def txt2img_create_processing(id_task: str, request: gr.Request, prompt: str, ne
 
 
 def txt2img_upscale(id_task: str, request: gr.Request, gallery, gallery_index, generation_info, *args):
-    assert len(gallery) > 0, 'No image to upscale'
-    assert 0 <= gallery_index < len(gallery), f'Bad image index: {gallery_index}'
+    assert len(gallery) > 0, '拡大する画像がありません'
+    assert 0 <= gallery_index < len(gallery), f'不正な画像インデックス: {gallery_index}'
 
     p = txt2img_create_processing(id_task, request, *args, force_enable_hr=True)
     p.batch_size = 1

@@ -32,7 +32,7 @@ def initialize():
     devices.dtype_inference = torch.float32 if cmd_opts.precision == 'full' else devices.dtype
 
     if cmd_opts.precision == "half":
-        msg = "--no-half and --no-half-vae conflict with --precision half"
+        msg = "--no-half と --no-half-vae は --precision half と衝突します。"
         assert devices.dtype == torch.float16, msg
         assert devices.dtype_vae == torch.float16, msg
         assert devices.dtype_inference == torch.float16, msg

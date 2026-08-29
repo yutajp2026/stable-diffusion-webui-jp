@@ -15,7 +15,7 @@ def get_param(model) -> torch.nn.Parameter:
     for param in model.parameters():
         return param
 
-    raise ValueError(f"No parameters found in model {model!r}")
+    raise ValueError(f"モデル {model!r} にはパラメータが見つかりません")
 
 
 def float64(t: torch.Tensor):

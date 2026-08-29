@@ -70,19 +70,19 @@ class State:
     def request_restart(self) -> None:
         self.interrupt()
         self.server_command = "restart"
-        log.info("Received restart request")
+        log.info("再起動リクエストを受信しました")
 
     def skip(self):
         self.skipped = True
-        log.info("Received skip request")
+        log.info("スキップリクエストを受信しました")
 
     def interrupt(self):
         self.interrupted = True
-        log.info("Received interrupt request")
+        log.info("割り込みリクエストを受信しました")
 
     def stop_generating(self):
         self.stopping_generation = True
-        log.info("Received stop generating request")
+        log.info("生成停止リクエストを受信しました")
 
     def nextjob(self):
         if shared.opts.live_previews_enable and shared.opts.show_progress_every_n_steps == -1:
@@ -124,11 +124,11 @@ class State:
         self.textinfo = None
         self.job = job
         devices.torch_gc()
-        log.info("Starting job %s", job)
+        log.info("ジョブを開始します %s", job)
 
     def end(self):
         duration = time.time() - self.time_start
-        log.info("Ending job %s (%.2f seconds)", self.job, duration)
+        log.info("ジョブを終了します %s (%.2f seconds)", self.job, duration)
         self.job = ""
         self.job_count = 0
 

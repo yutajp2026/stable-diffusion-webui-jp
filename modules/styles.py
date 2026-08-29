@@ -145,7 +145,7 @@ class StyleDatabase:
                         row["name"], prompt, negative_prompt, str(path)
                     )
         except Exception:
-            errors.report(f'Error loading styles from {path}: ', exc_info=True)
+            errors.report(f'{path} からスタイルを読み込む際にエラーが発生しました: ', exc_info=True)
 
     def get_style_paths(self) -> set:
         """Returns a set of all distinct paths of files that styles are loaded from."""

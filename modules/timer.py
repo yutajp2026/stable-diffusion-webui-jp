@@ -83,7 +83,7 @@ class Timer:
 
 
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("--log-startup", action='store_true', help="print a detailed log of what's happening at startup")
+parser.add_argument("--log-startup", action='store_true', help="起動時に何が起こっているかの詳細なログを出力する")
 args = parser.parse_known_args()[0]
 
 startup_timer = Timer(print_log=args.log_startup)

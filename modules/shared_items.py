@@ -124,7 +124,7 @@ def ui_reorder_categories():
 def callbacks_order_settings():
     options = {
         "sd_vae_explanation": OptionHTML("""
-    For categories below, callbacks added to dropdowns happen before others, in order listed.
+    以下のカテゴリについては、ドロップダウンに追加されたコールバックは、リストに記載された順序で他のものより先に実行されます。
     """),
 
     }
@@ -152,9 +152,9 @@ def callbacks_order_settings():
         if not callbacks:
             continue
 
-        option_info = OptionInfo([], f"{category} callback priority", ui_components.DropdownMulti, {"choices": [x.name for x in callbacks]})
+        option_info = OptionInfo([], f"{category} コールバック優先度", ui_components.DropdownMulti, {"choices": [x.name for x in callbacks]})
         option_info.needs_restart()
-        option_info.html("<div class='info'>Default order: <ol>" + "".join(f"<li>{html.escape(x.name)}</li>\n" for x in callbacks) + "</ol></div>")
+        option_info.html("<div class='info'>デフォルトの順序: <ol>" + "".join(f"<li>{html.escape(x.name)}</li>\n" for x in callbacks) + "</ol></div>")
         options['prioritized_callbacks_' + category] = option_info
 
     return options

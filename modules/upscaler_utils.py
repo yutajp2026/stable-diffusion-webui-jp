@@ -24,9 +24,9 @@ def torch_bgr_to_pil_image(tensor: torch.Tensor) -> Image.Image:
         # If we're given a tensor with a batch dimension, squeeze it out
         # (but only if it's a batch of size 1).
         if tensor.shape[0] != 1:
-            raise ValueError(f"{tensor.shape} does not describe a BCHW tensor")
+            raise ValueError(f"{tensor.shape} はBCHWテンソルを説明していません")
         tensor = tensor.squeeze(0)
-    assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
+    assert tensor.ndim == 3, f"{tensor.shape} はCHWテンソルを説明していません"
     # TODO: is `tensor.float().cpu()...numpy()` the most efficient idiom?
     arr = tensor.float().cpu().clamp_(0, 1).numpy()  # clamp
     arr = 255.0 * np.moveaxis(arr, 0, 2)  # CHW to HWC, rescale
@@ -57,7 +57,7 @@ def upscale_with_model(
     desc="tiled upscale",
 ) -> Image.Image:
     if tile_size <= 0:
-        logger.debug("Upscaling %s without tiling", img)
+        logger.debug("タイルなしで%sをアップスケーリング", img)
         output = upscale_pil_patch(model, img)
         logger.debug("=> %s", output)
         return output
@@ -107,7 +107,7 @@ def tiled_upscale_2(
     tile_size = min(tile_size, h, w)
 
     if tile_size <= 0:
-        logger.debug("Upscaling %s without tiling", img.shape)
+        logger.debug("タイルなしで%sをアップスケーリング", img.shape)
         return model(img)
 
     stride = tile_size - tile_overlap
@@ -122,7 +122,7 @@ def tiled_upscale_2(
         dtype=img.dtype,
     )
     weights = torch.zeros_like(result)
-    logger.debug("Upscaling %s to %s with tiles", img.shape, result.shape)
+    logger.debug("タイルを使って%sを%sにアップスケーリング", img.shape, result.shape)
     with tqdm.tqdm(total=len(h_idx_list) * len(w_idx_list), desc=desc, disable=not shared.opts.enable_upscale_progressbar) as pbar:
         for h_idx in h_idx_list:
             if shared.state.interrupted or shared.state.skipped:
