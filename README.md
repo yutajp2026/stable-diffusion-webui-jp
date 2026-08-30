@@ -87,7 +87,7 @@ Gradio ライブラリで実装された Stable Diffusion 用の Web インタ�
 - プログレスバーに完了予定時間を表示
 - API
 - 拡張機能: [Aesthetic Gradients](https://github.com/AUTOMATIC1111/stable-diffusion-webui-aesthetic-gradients) で、CLIP 画像 embedding を使い特定の美的傾向を持つ画像を生成（実装は [こちら](https://github.com/vicgalle/stable-diffusion-aesthetic-gradients)）
-- モデルは標準で [Stable Diffusion 2.1](https://huggingface.co/webui/stable-diffusion-2-1/tree/main)
+- Stable Diffusion 2.0 / 2.1 のサポート – 手順は[ウィキ](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#stable-diffusion-20)を確認してください
 - [Alt-Diffusion](https://arxiv.org/abs/2211.06679) に対応（手順は [wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Features#alt-diffusion) を参照）
 - 不適切な文字を含まない生成
 - safetensors 形式のチェックポイントを読み込み
