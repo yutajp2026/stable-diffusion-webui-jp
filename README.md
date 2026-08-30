@@ -117,7 +117,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 1. [Git](https://git-scm.com/download/win) をインストールします。(`winget install --id Git.Git -e --source winget`を実行するのがよい)
 2. このリポジトリをダウンロードします。たとえば `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp.git` を実行します。
 3. 必要に応じて変数(後述)を`set (変数)=(値)`のかたちで設定します。
-4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します(または[webui-user.bat](https://github.com/yutajp2026/bat-collection/blob/main/webui-user.bat)を編集して実行)。
+4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します(または[webui-user.bat](https://github.com/yutajp2026/bat-collection/blob/main/webui-user.bat)の変数を編集して実行)。
 
 ### Linux への自動インストール
 1. 依存関係をインストールします:
