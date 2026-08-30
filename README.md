@@ -109,7 +109,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 - Pythonはwebui.batにて自動でインストールされるようにしました(Windowsアプリ版以外はPythonが実行できない場合に限る)。
 - Pythonのバージョンが競合する場合は環境変数Pathから使わないPythonのパスを削除するとよいです。
 
-**リリースアプリパッケージ版(Windows推奨)**:
+リリースアプリパッケージ版(**Windowsは推奨**):
 
 2026年内公開予定
 
@@ -117,7 +117,7 @@ Google などの検索エンジンが wiki をクロールできるように、�
 1. [Git](https://git-scm.com/download/win) をインストールします。(`winget install --id Git.Git -e --source winget`を実行するのがよい)
 2. このリポジトリをダウンロードします。たとえば `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp.git` を実行します。
 3. 必要に応じて変数(後述)を`set (変数)=(値)`のかたちで設定します。
-4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します。
+4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します(または[webui-user.bat](https://github.com/yutajp2026/bat-collection/blob/main/webui-user.bat)を編集して実行)。
 
 ### Linux への自動インストール
 1. 依存関係をインストールします:
@@ -155,6 +155,16 @@ git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
 
 3. 必要に応じて変数(後述)を `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定します。
 4. `webui.sh` を実行します。
+
+### Macへのインストール
+Macを使ったことがないのでよくわかりませんが、[wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon)によると、この手順でできるらしいです。
+
+1. Homebrewがインストールされていない場合は、https://brew.sh の指示に従ってインストールしてください。ターミナルウィンドウを開いたままにして、"Next steps" の下の指示に従いHomebrewをPATHに追加します。
+2. 新しいターミナルウィンドウを開き、次のコマンドを実行します: brew install cmake protobuf rust python@3.10 git wget
+3. 次のコマンドを実行してWeb UIリポジトリをクローンします: git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
+4. 使用したいStable Diffusionモデル/チェックポイントをstable-diffusion-webui/models/Stable-diffusionに配置してください。持っていない場合は、[Downloading Stable Diffusion Models](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon#downloading-stable-diffusion-models)を参照してください。
+5. cd stable-diffusion-webui でディレクトリに移動し、次に ./webui.sh を実行してWeb UIを起動します。Pythonの仮想環境がvenvで作成され有効化され、残りの不足している依存関係が自動的にダウンロードおよびインストールされます。
+6. 後でWeb UIプロセスを再起動するには、再度 ./webui.sh を実行してください。Web UIは自動で更新されないことに注意してください。更新するには、./webui.sh を実行する前に git pull を実行してください。
 
 ### 変数
 - コマンドライン引数(COMMANDLINE_ARGS)については、-hに設定すると一覧を簡単に確認できます。
