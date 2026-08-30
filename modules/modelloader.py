@@ -36,7 +36,7 @@ def load_file_from_url(
     cached_file = os.path.abspath(os.path.join(model_dir, file_name))
     if not os.path.exists(cached_file):
         print(f'ダウンロード中: "{url}" to {cached_file}\n')
-        print("途中で中断した場合、スクリプトを再試行すると再開されます。")
+        print("この作業は数分かかります。途中で中断した場合、スクリプトを再試行してください。")
         from torch.hub import download_url_to_file
         download_url_to_file(url, cached_file, progress=progress, hash_prefix=hash_prefix)
     return cached_file
