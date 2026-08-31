@@ -120,37 +120,21 @@ Google などの検索エンジンが wiki をクロールできるように、�
 4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します(または[webui-user.bat](https://github.com/yutajp2026/bat-collection/blob/main/webui-user.bat)の変数を編集して実行)。
 
 ### Linux への自動インストール
-1. 依存関係をインストールします:
-```bash
-# Debian-based:
-sudo apt install wget git python3 python3-venv libgl1 libglib2.0-0
-# Red Hat-based:
-sudo dnf install wget git python3 gperftools-libs libglvnd-glx
-# openSUSE-based:
-sudo zypper install wget git python3 libtcmalloc4 libglvnd
-# Arch-based:
-sudo pacman -S wget git python3
-```
-システムが非常に新しい場合は、python3ではなくpython3.11 または python3.10 をインストールする必要があります:
-```bash
-# Ubuntu 24.04
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update
-sudo apt install python3.11
-
-# Manjaro/Arch
-sudo pacman -S yay
-yay -S python311 # do not confuse with python3.11 package
-
-# Only for 3.11
-# Then set up env variable in launch script
-export python_cmd="python3.11"
-# or in webui-user.sh
-python_cmd="python3.11"
-```
-2. Web UI をインストールするディレクトリへ移動し、任意の場所にリポジトリを clone します:
+1. Web UI をインストールするディレクトリへ移動し、任意の場所にリポジトリを clone します:
 ```bash
 git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
+```
+
+2. 依存関係をインストールします:
+```bash
+# Debian-based:
+sudo apt install wget git python3.10 python3.10-venv libgl1 libglib2.0-0
+# Red Hat-based:
+sudo dnf install wget git python3.10 gperftools-libs libglvnd-glx
+# openSUSE-based:
+sudo zypper install wget git python3.10 libtcmalloc4 libglvnd
+# Arch-based:
+sudo pacman -S wget git python3.10
 ```
 
 3. 必要に応じて変数(後述)を `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定します。
@@ -158,13 +142,14 @@ git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
 
 ### Macへのインストール
 Macを使ったことがないのでよくわかりませんが、[wiki](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon)によると、この手順でできるらしいです。
+ただし1, 2は自動で行うようにしました。
 
 1. Homebrewがインストールされていない場合は、https://brew.sh の指示に従ってインストールしてください。ターミナルウィンドウを開いたままにして、"Next steps" の下の指示に従いHomebrewをPATHに追加します。
-2. 新しいターミナルウィンドウを開き、次のコマンドを実行します: brew install cmake protobuf rust python@3.10 git wget
-3. 次のコマンドを実行してWeb UIリポジトリをクローンします: git clone https://github.com/yutajp2026/stable-diffusion-webui-jp
+2. 新しいターミナルウィンドウを開き、次のコマンドを実行します: `brew install cmake protobuf rust python@3.10 git wget`
+3. 次のコマンドを実行してWeb UIリポジトリをクローンします: `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp`
 4. 使用したいStable Diffusionモデル/チェックポイントをstable-diffusion-webui/models/Stable-diffusionに配置してください。持っていない場合は、[Downloading Stable Diffusion Models](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon#downloading-stable-diffusion-models)を参照してください。
-5. cd stable-diffusion-webui でディレクトリに移動し、次に ./webui.sh を実行してWeb UIを起動します。Pythonの仮想環境がvenvで作成され有効化され、残りの不足している依存関係が自動的にダウンロードおよびインストールされます。
-6. 後でWeb UIプロセスを再起動するには、再度 ./webui.sh を実行してください。Web UIは自動で更新されないことに注意してください。更新するには、./webui.sh を実行する前に git pull を実行してください。
+5. `cd stable-diffusion-webui` でディレクトリに移動し、次に `./webui.sh` を実行してWeb UIを起動します。Pythonの仮想環境がvenvで作成され有効化され、残りの不足している依存関係が自動的にダウンロードおよびインストールされます。
+6. 後でWeb UIプロセスを再起動するには、再度 `./webui.sh` を実行してください。Web UIは自動で更新されないことに注意してください。更新するには、`./webui.sh` を実行する前に `git pull` を実行してください。
 
 ### 変数
 - コマンドライン引数(COMMANDLINE_ARGS)については、-hに設定すると一覧を簡単に確認できます。
