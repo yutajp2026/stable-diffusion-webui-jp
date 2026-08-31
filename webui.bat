@@ -1,5 +1,7 @@
 @echo off
 
+cd %~dp0
+
 title Stable Diffusion WebUI - Python ‚Æ pip ‚ðŠm”F‚µ‚Ä‚¢‚Ü‚·...
 
 if not defined PYTHON (set PYTHON=python)
