@@ -103,23 +103,24 @@ Google などの検索エンジンが wiki をクロールできるように、�
 
 ## インストールと実行
 ### Windows 10/11 へのインストール
-ℹ️周知しておきたい内容
+ℹ️公式からの変更点など
 - 公式ではいろいろなGPU別にインストール方法が載っていますが、リポジトリが存在しない問題(後述)に悩まされるのでここでは記載しません。
 - アプリ版ではNvidia GPU搭載か(`nvidia-smi`を実行できるか)を自動で判断してくれるようにしました。非搭載のPCで自動インストールする場合、`set COMMANDLINE_ARGS=--use-cpu all --precision full --no-half --skip-torch-cuda-test`でコマンドライン引数(後述)を設定します。
 - Pythonはwebui.batにて自動でインストールされるようにしました(Windowsアプリ版以外はPythonが実行できない場合に限る)。
 - Pythonのバージョンが競合する場合は環境変数Pathから使わないPythonのパスを削除するとよいです。
 
-アプリ版(**Windowsは推奨**):
+#### アプリ版(Windowsは推奨)
 
 2026年内公開予定
 
-自動インストール(いろいろ大変):
+特徴:
+
+
+#### 自動インストール(いろいろ大変)
 1. [Git](https://git-scm.com/download/win) をインストールします。(`winget install --id Git.Git -e --source winget`を実行するのがよい)
 2. このリポジトリをダウンロードします。たとえば `git clone https://github.com/yutajp2026/stable-diffusion-webui-jp.git` を実行します。
 3. 必要に応じて変数(後述)を`set (変数)=(値)`のかたちで設定します。
 4. 管理者権限ではない通常のユーザーとして `webui.bat` を実行します(または[webui-user.bat](https://github.com/yutajp2026/bat-collection/blob/main/webui-user.bat)の変数を編集して実行)。
-
-ℹ️自動インストールの場合は全部、`git pull`で更新します。
 
 ### Linux への自動インストール
 1. Web UI をインストールするディレクトリへ移動し、任意の場所にリポジトリを clone します:
@@ -139,7 +140,7 @@ sudo zypper install wget git python3.10 libtcmalloc4 libglvnd
 sudo pacman -S wget git python3.10
 ```
 
-3. 必要に応じて変数(後述)を `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定します。
+3. 必要に応じて変数(後述)を `webui-user.sh` に、または直接、`export (変数)="(値)"`のかたちで設定します(例:`export COMMANDLINE_ARGS=--use-cpu all --precision full --no-half --skip-torch-cuda-test`でCPU実行)。
 4. `webui.sh` を実行します。
 
 ### Macへの自動インストール
@@ -153,15 +154,19 @@ Macを使ったことがないのでよくわかりませんが、[wiki](https:/
 4. 使用したいStable Diffusionモデル/チェックポイントをstable-diffusion-webui-jp/models/Stable-diffusionに配置してください。持っていない場合は、[Downloading Stable Diffusion Models](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon#downloading-stable-diffusion-models)を参照してください。
 5. `cd stable-diffusion-webui` でディレクトリに移動し、次に `./webui.sh` を実行してWeb UIを起動します。
 
-### 更新
-- Windowsアプリ版はReleasesから新しいリリースをインストールすればできます。
-- 自動インストールの場合はアプリのディレクトリで`git pull`を実行します。Windowsアプリ版でもできますが、これだとwebui-user.exeが更新されません。
-
 ### 変数
 - コマンドライン引数(COMMANDLINE_ARGS)については、-hに設定すると一覧を簡単に確認できます。
 - 公式ではおそらく言及されていませんが、ACCELERATEを"True"に設定するとaccelerateで実行できます。[accelerateの詳細](https://self-development.info/%e3%80%90pytorch%e3%80%91accelerate%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%81%a8%e8%a8%ad%e5%ae%9a/)
 
 それ以外の変数は[wiki参照](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings)
+
+### 更新
+- Windowsアプリ版はReleasesから新しいリリースをインストールすれば、`git pull`と同等の動作が現れます(違いは下記)。
+- 自動インストールの場合はアプリのディレクトリで`git pull`を実行します。Windowsアプリ版でもできますが、これだとwebui-user.exeが更新されません。
+
+### アンインストール
+- Windowsアプリ版はアンインストーラ実行(ショートカットとスクリプトのみ削除)後にアプリディレクトリを手動で削除してください。
+- 自動インストール版はディレクトリを中身ごと削除してください。
 
 ## コントリビューション
 このリポジトリにコードを追加する方法は、[コントリビューションガイド](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Contributing)を参照してください。
