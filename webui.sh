@@ -278,8 +278,7 @@ prepare_tcmalloc() {
             fi
         done
         if [[ -z "${LD_PRELOAD}" ]]; then
-            printf "\e[1m\e[31mTCMalloc を見つけられません。インストールします...\e[0m\n"
-            git clone https://github.com/google/tcmalloc.git
+            printf "\e[1m\e[31mTCMallocを見つけることができません。システムにtcmallocまたはgoogle-perftoolがインストールされていますか？（CPUのメモリ使用量を改善します）\e[0m\n"
         fi
     fi
 }
