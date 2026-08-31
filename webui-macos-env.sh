@@ -4,6 +4,12 @@
 # Please modify webui-user.sh to change these instead of this file #
 ####################################################################
 
+if ! command -v brew >/dev/null 2>&1; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+brew install cmake protobuf rust python@3.10 git wget
+
 export install_dir="$HOME"
 export COMMANDLINE_ARGS="--skip-torch-cuda-test --upcast-sampling --no-half-vae --use-cpu interrogate"
 export PYTORCH_ENABLE_MPS_FALLBACK=1
