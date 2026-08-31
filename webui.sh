@@ -13,14 +13,16 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         then
         source "$SCRIPT_DIR"/webui-macos-env.sh
     fi
+else
+    if [[ -f "$SCRIPT_DIR"/webui-user.sh ]]
+    then
+        source "$SCRIPT_DIR"/webui-user.sh
+    fi
 fi
 
 # Read variables from webui-user.sh
 # shellcheck source=/dev/null
-if [[ -f "$SCRIPT_DIR"/webui-user.sh ]]
-then
-    source "$SCRIPT_DIR"/webui-user.sh
-fi
+
 
 # If $venv_dir is "-", then disable venv support
 use_venv=1
@@ -100,7 +102,7 @@ printf "\n%s\n" "${delimiter}"
 if [[ $(id -u) -eq 0 && can_run_as_root -eq 0 ]]
 then
     printf "\n%s\n" "${delimiter}"
-    printf "\e[1m\e[31mERROR: This script must not be launched as root, aborting...\e[0m"
+    printf "\e[1m\e[31mエラー: このスクリプトは root として実行してはいけません、中止します...\e[0m"
     printf "\n%s\n" "${delimiter}"
     exit 1
 else
@@ -112,7 +114,7 @@ fi
 if [[ $(getconf LONG_BIT) = 32 ]]
 then
     printf "\n%s\n" "${delimiter}"
-    printf "\e[1m\e[31mERROR: Unsupported Running on a 32bit OS\e[0m"
+    printf "\e[1m\e[31mエラー: 32ビットOSでの実行はサポートされていません\e[0m"
     printf "\n%s\n" "${delimiter}"
     exit 1
 fi
@@ -120,7 +122,7 @@ fi
 if [[ -d "$SCRIPT_DIR/.git" ]]
 then
     printf "\n%s\n" "${delimiter}"
-    printf "Repo already cloned, using it as install directory"
+    printf "リポジトリはすでにクローン済みなので、インストールディレクトリとして使用します"
     printf "\n%s\n" "${delimiter}"
     install_dir="${SCRIPT_DIR}/../"
     clone_dir="${SCRIPT_DIR##*/}"
@@ -145,7 +147,7 @@ case "$gpu_info" in
             then
                 export TORCH_COMMAND="pip install https://download.pytorch.org/whl/nightly/rocm5.2/torch-2.0.0.dev20230209%2Brocm5.2-cp310-cp310-linux_x86_64.whl https://download.pytorch.org/whl/nightly/rocm5.2/torchvision-0.15.0.dev20230209%2Brocm5.2-cp310-cp310-linux_x86_64.whl"
             else
-                printf "\e[1m\e[31mERROR: RX 5000 series GPUs python version must be between 3.8 and 3.10, aborting...\e[0m"
+                printf "\e[1m\e[31mエラー: RX 5000 series GPUs の Python バージョンは 3.8 から 3.10 の間である必要があります、中止します...\e[0m"
                 exit 1
             fi
         fi
@@ -157,7 +159,7 @@ case "$gpu_info" in
     ;;
     *"Renoir"*) export HSA_OVERRIDE_GFX_VERSION=9.0.0
         printf "\n%s\n" "${delimiter}"
-        printf "Experimental support for Renoir: make sure to have at least 4GB of VRAM and 10GB of RAM or enable cpu mode: --use-cpu all --no-half"
+        printf "ルノワール用の実験的サポート：少なくとも4GBのVRAMと10GBのRAMを確保するか、CPUモードを有効にしてください: --use-cpu all --no-half"
         printf "\n%s\n" "${delimiter}"
     ;;
     *)
@@ -179,7 +181,7 @@ do
     if ! hash "${preq}" &>/dev/null
     then
         printf "\n%s\n" "${delimiter}"
-        printf "\e[1m\e[31mERROR: %s is not installed, aborting...\e[0m" "${preq}"
+        printf "\e[1m\e[31mエラー: %s がインストールされていません、中止します...\e[0m" "${preq}"
         printf "\n%s\n" "${delimiter}"
         exit 1
     fi
@@ -188,29 +190,29 @@ done
 if [[ $use_venv -eq 1 ]] && ! "${python_cmd}" -c "import venv" &>/dev/null
 then
     printf "\n%s\n" "${delimiter}"
-    printf "\e[1m\e[31mERROR: python3-venv is not installed, aborting...\e[0m"
+    printf "\e[1m\e[31mエラー: python3-venv がインストールされていません、中止します...\e[0m"
     printf "\n%s\n" "${delimiter}"
     exit 1
 fi
 
-cd "${install_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/, aborting...\e[0m" "${install_dir}"; exit 1; }
+cd "${install_dir}"/ || { printf "\e[1m\e[31mエラー: %s/ に移動できません、中止します...\e[0m" "${install_dir}"; exit 1; }
 if [[ -d "${clone_dir}" ]]
 then
-    cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
+    cd "${clone_dir}"/ || { printf "\e[1m\e[31mエラー: %s/%s/ に移動できません、中止します...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
 else
     printf "\n%s\n" "${delimiter}"
-    printf "Clone stable-diffusion-webui"
+    printf "stable-diffusion-webui をクローンしています"
     printf "\n%s\n" "${delimiter}"
     "${GIT}" clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git "${clone_dir}"
-    cd "${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
+    cd "${clone_dir}"/ || { printf "\e[1m\e[31mエラー: %s/%s/ に移動できません、中止します...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
 fi
 
 if [[ $use_venv -eq 1 ]] && [[ -z "${VIRTUAL_ENV}" ]];
 then
     printf "\n%s\n" "${delimiter}"
-    printf "Create and activate python venv"
+    printf "python venv を作成して有効化しています"
     printf "\n%s\n" "${delimiter}"
-    cd "${install_dir}"/"${clone_dir}"/ || { printf "\e[1m\e[31mERROR: Can't cd to %s/%s/, aborting...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
+    cd "${install_dir}"/"${clone_dir}"/ || { printf "\e[1m\e[31mエラー: %s/%s/ に移動できません、中止します...\e[0m" "${install_dir}" "${clone_dir}"; exit 1; }
     if [[ ! -d "${venv_dir}" ]]
     then
         "${python_cmd}" -m venv "${venv_dir}"
@@ -225,13 +227,13 @@ then
         python_cmd="${venv_dir}"/bin/python
     else
         printf "\n%s\n" "${delimiter}"
-        printf "\e[1m\e[31mERROR: Cannot activate python venv, aborting...\e[0m"
+        printf "\e[1m\e[31mエラー: python venv を有効にできません、中止します...\e[0m"
         printf "\n%s\n" "${delimiter}"
         exit 1
     fi
 else
     printf "\n%s\n" "${delimiter}"
-    printf "python venv already activate or run without venv: ${VIRTUAL_ENV}"
+    printf "python venv は既に有効化されているか、venvなしで実行されています: ${VIRTUAL_ENV}"
     printf "\n%s\n" "${delimiter}"
 fi
 
@@ -276,7 +278,8 @@ prepare_tcmalloc() {
             fi
         done
         if [[ -z "${LD_PRELOAD}" ]]; then
-            printf "\e[1m\e[31mCannot locate TCMalloc. Do you have tcmalloc or google-perftool installed on your system? (improves CPU memory usage)\e[0m\n"
+            printf "\e[1m\e[31mTCMalloc を見つけられません。インストールします...\e[0m\n"
+            git clone https://github.com/google/tcmalloc.git
         fi
     fi
 }
