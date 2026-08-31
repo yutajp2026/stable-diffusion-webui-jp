@@ -44,7 +44,7 @@ fi
 # python3 executable
 if [[ -z "${python_cmd}" ]]
 then
-  python_cmd="python3.10"
+  python_cmd="python3.11"
 fi
 if [[ ! -x "$(command -v "${python_cmd}")" ]]
 then
