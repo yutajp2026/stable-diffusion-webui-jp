@@ -46,7 +46,7 @@ fi
 # python3 executable
 if [[ -z "${python_cmd}" ]]
 then
-  python_cmd="python3.11"
+  python_cmd="python3.10"
 fi
 if [[ ! -x "$(command -v "${python_cmd}")" ]]
 then
@@ -94,8 +94,8 @@ export PIP_IGNORE_INSTALLED=0
 delimiter="################################################################"
 
 printf "\n%s\n" "${delimiter}"
-printf "\e[1m\e[32mInstall script for stable-diffusion + Web UI\n"
-printf "\e[1m\e[34mTested on Debian 11 (Bullseye), Fedora 34+ and openSUSE Leap 15.4 or newer.\e[0m"
+printf "\e[1m\e[32mstable-diffusion + Web UI のインストールスクリプト\n"
+printf "\e[1m\e[34mDebian 11 (Bullseye), Fedora 34+ and openSUSE Leap 15.4 or newer でテストされています。\e[0m"
 printf "\n%s\n" "${delimiter}"
 
 # Do not run as root
@@ -289,13 +289,13 @@ export SD_WEBUI_RESTART=tmp/restart
 while [[ "$KEEP_GOING" -eq "1" ]]; do
     if [[ ! -z "${ACCELERATE}" ]] && [ ${ACCELERATE}="True" ] && [ -x "$(command -v accelerate)" ]; then
         printf "\n%s\n" "${delimiter}"
-        printf "Accelerating launch.py..."
+        printf "launch.py を加速中..."
         printf "\n%s\n" "${delimiter}"
         prepare_tcmalloc
         accelerate launch --num_cpu_threads_per_process=6 "${LAUNCH_SCRIPT}" "$@"
     else
         printf "\n%s\n" "${delimiter}"
-        printf "Launching launch.py..."
+        printf "launch.py を起動しています..."
         printf "\n%s\n" "${delimiter}"
         prepare_tcmalloc
         "${python_cmd}" -u "${LAUNCH_SCRIPT}" "$@"
