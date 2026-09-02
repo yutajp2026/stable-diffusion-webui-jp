@@ -33,10 +33,10 @@ def find_sampler_config(name):
 def create_sampler(name, model):
     config = find_sampler_config(name)
 
-    assert config is not None, f'bad sampler name: {name}'
+    assert config is not None, f'不適切なサンプラー名: {name}'
 
     if model.is_sdxl and config.options.get("no_sdxl", False):
-        raise Exception(f"Sampler {config.name} is not supported for SDXL")
+        raise Exception(f"サンプラー {config.name} は SDXL ではサポートされていません。")
 
     sampler = config.constructor(model)
     sampler.config = config
