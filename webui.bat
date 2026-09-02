@@ -38,6 +38,7 @@ if %ERRORLEVEL% == 0 goto :activate_venv
 
 for /f "delims=" %%i in ('CALL %PYTHON% -c "import sys; print(sys.executable)"') do set PYTHON_FULLNAME="%%i"
 title StableDiffusionWebUI - %PYTHON_FULLNAME% ‚Å‰¼‘zŠÂ‹« %VENV_DIR% ‚ðì¬‚µ‚Ä‚¢‚Ü‚·...
+echo ‰¼‘zŠÂ‹«‚ðì¬‚µ‚Ä‚¢‚Ü‚·B¡•Â‚¶‚È‚¢‚Å‚­‚¾‚³‚¢...
 %PYTHON_FULLNAME% -m venv "%VENV_DIR%" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :upgrade_pip
 goto :show_stdout_stderr
