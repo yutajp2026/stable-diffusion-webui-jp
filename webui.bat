@@ -37,14 +37,13 @@ dir "%VENV_DIR%\Scripts\Python.exe" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :activate_venv
 
 for /f "delims=" %%i in ('CALL %PYTHON% -c "import sys; print(sys.executable)"') do set PYTHON_FULLNAME="%%i"
-title StableDiffusionWebUI - %PYTHON_FULLNAME% で仮想環境 %VENV_DIR% を作成しています...
-echo 仮想環境を作成しています。今閉じないでください...
+title StableDiffusionWebUI - (閉じないでください)%PYTHON_FULLNAME% で仮想環境 %VENV_DIR% を作成しています...
 %PYTHON_FULLNAME% -m venv "%VENV_DIR%" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :upgrade_pip
 goto :show_stdout_stderr
 
 :upgrade_pip
-title StableDiffusionWebUI - PIPをアップグレードしています...
+title StableDiffusionWebUI - (閉じないでください)PIPをアップグレードしています...
 "%VENV_DIR%\Scripts\Python.exe" -m pip install --upgrade pip
 if %ERRORLEVEL% == 0 goto :activate_venv
 echo 警告: PIP をアップグレードできませんでした。
