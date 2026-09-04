@@ -16,7 +16,7 @@ mkdir tmp 2>NUL
 %PYTHON% -c "" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :check_pip
 title StableDiffusionWebUI - Pythonをインストールしています...
-curl  -L -O "https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe"
+curl -L -O "https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe"
 echo msgbox "Pythonをインストールします。「Add python.exe to PATH」にチェックを入れ、「Install Now」を選択してください。インストールできたら、このウィンドウを閉じてください。" > %TEMP%/msgboxtest.vbs & %TEMP%/msgboxtest.vbs
 start python-3.10.6-amd64.exe & goto :show_stdout_stderr
 
@@ -37,7 +37,7 @@ dir "%VENV_DIR%\Scripts\Python.exe" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :activate_venv
 
 for /f "delims=" %%i in ('CALL %PYTHON% -c "import sys; print(sys.executable)"') do set PYTHON_FULLNAME="%%i"
-title StableDiffusionWebUI - (閉じないでください)%PYTHON_FULLNAME% で仮想環境 %VENV_DIR% を作成しています...
+title StableDiffusionWebUI - (閉じないでください)仮想環境を作成しています...
 %PYTHON_FULLNAME% -m venv "%VENV_DIR%" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% == 0 goto :upgrade_pip
 goto :show_stdout_stderr
@@ -62,13 +62,13 @@ set ACCELERATE="%VENV_DIR%\Scripts\accelerate.exe"
 if EXIST %ACCELERATE% goto :accelerate_launch
 
 :launch
-title StableDiffusionWebUI %COMMANDLINE_ARGS%
+title StableDiffusionWebUI - python launch.py %*
 %PYTHON% launch.py %*
 if EXIST tmp/restart goto :skip_venv
 goto :endofscript
 
 :accelerate_launch
-title StableDiffusionWebUI %COMMANDLINE_ARGS% with %ACCELERATE%
+title StableDiffusionWebUI - accelerate launch --num_cpu_threads_per_process=6 launch.py %COMMANDLINE_ARGS%
 %ACCELERATE% launch --num_cpu_threads_per_process=6 launch.py
 if EXIST tmp/restart goto :skip_venv
 goto :endofscript
