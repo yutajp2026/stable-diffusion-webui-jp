@@ -62,7 +62,7 @@ set ACCELERATE="%VENV_DIR%\Scripts\accelerate.exe"
 if EXIST %ACCELERATE% goto :accelerate_launch
 
 :launch
-title StableDiffusionWebUI - python launch.py %*
+title StableDiffusionWebUI - python launch.py %COMMANDLINE_ARGS%
 %PYTHON% launch.py %*
 if EXIST tmp/restart goto :skip_venv
 goto :endofscript
